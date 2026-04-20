@@ -1,0 +1,28 @@
+# Private launch materials — keep local, never push
+launch/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Hook state files
+.brain-last-run
+.context-anchor-counter
+.context-anchor-session
+
+# Metrics data (personal to each user)
+.claude/metrics/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Python virtual environments
+venv/
+.venv/
+env/

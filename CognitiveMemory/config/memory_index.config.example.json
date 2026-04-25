@@ -1,0 +1,7 @@
+{
+  "_comment": "Copy to memory_index.config.json and edit. Paths are relative to the repo root unless absolute. Run: python tools/memory_index_generate.py",
+  "rules_dir": "memory/rules",
+  "working_memory_file": "memory/working-memory.md",
+  "decisions_section": "Key Decisions",
+  "output_file": "memory/INDEX.md"
+}

@@ -1,0 +1,18 @@
+# Memory Index
+
+Generated YYYY-MM-DD HH:MM by `memory_index_generate.py`.
+Regenerable — do not hand-edit. Fix sources or tune script instead.
+
+**Sources:** N rules + M decisions.
+
+Flat lists for now — auto-clustering re-introduced when entry count justifies it (~50+).
+
+## Rules (N)
+
+- Rule title pulled from the first `# Heading` of each rule file → [filename.md](memory/rules/filename.md)
+- ...
+
+## Decisions (newest first) (M)
+
+- Decision text without the date suffix *(YYYY-MM-DD)* → [working-memory.md](memory/working-memory.md)
+- ...

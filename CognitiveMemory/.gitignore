@@ -1,0 +1,13 @@
+# Runtime state — regenerated on each run
+memory/INDEX.md
+memory/.memory_index_last_run
+
+# User config (keep example, ignore the real one)
+config/memory_index.config.json
+
+# User's actual settings.json (keep .example)
+.claude/settings.json
+
+# Python
+__pycache__/
+*.pyc

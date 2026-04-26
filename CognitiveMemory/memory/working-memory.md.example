@@ -1,0 +1,16 @@
+# Working Memory
+
+## Current Focus
+What you are working on right now. The indexer ignores this section.
+
+## Recent Sessions
+Brief notes per session. The indexer ignores this section.
+
+### Key Decisions
+The indexer reads bullet entries from this section. Format:
+- One sentence summary of the decision (YYYY-MM-DD)
+- Another decision with its date (YYYY-MM-DD)
+- Decisions without dates are still indexed but sort to the bottom
+
+### Infrastructure Map
+This section is ignored. The indexer stops reading at the next `### ` heading.

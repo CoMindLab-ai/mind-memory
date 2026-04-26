@@ -2,6 +2,8 @@
 
 > **Give Claude Code a memory that gets better the more you use it.**
 
+**⚠️ Research preview — expect rough edges.** This is a working prototype shared early to invite critique and use-case feedback. Documentation may be ahead of code in places, the wizard has been dogfooded by one user, and the headline measurement (H5 repeat-correction reduction) hasn't been demonstrated yet. If you install it, plan to read the source. File issues — that's exactly the feedback we need.
+
 A drop-in folder + a small set of Python hooks that make Claude Code remember your corrections, preferences, and project lessons across sessions. The hooks run continuously — collecting signals mid-session, promoting confirmed patterns to rules, measuring whether memory is helping you. Markdown-native. MIT. Installs in 5 minutes.
 
 ## The headline number

@@ -75,7 +75,7 @@ These are proxies. A polite user who types "hmm, not quite" won't register as ne
 
 ### 7. Is session-end the right time to consolidate?
 
-The session-end hook is convenient but has a flaw: by the time the session ends, the model that's doing the consolidation has already drifted. Mid-session consolidation (every 25 messages, as the larger Minds system does) catches insights while they're fresh.
+The session-end hook is convenient but has a flaw: by the time the session ends, the model that's doing the consolidation has already drifted. Mid-session consolidation (every 25 messages, as the larger CognitiveMemory system does) catches insights while they're fresh.
 
 **Open question**: for the simple starter-kit case, is session-end good enough? Or should even the minimal version run mid-session consolidation?
 
@@ -93,7 +93,7 @@ We currently use self-consolidation. Haven't tested critic.
 
 ### 9. Is the 5-minute install achievable in practice?
 
-We've optimised for "copy 3 files, run `/mind-setup`, done". That's fast on a fresh project. On an existing Claude Code project with a customised `.claude/settings.json`, it's harder — merging hook config is a manual step.
+We've optimised for "copy 3 files, run `/cognitive-memory-setup`, done". That's fast on a fresh project. On an existing Claude Code project with a customised `.claude/settings.json`, it's harder — merging hook config is a manual step.
 
 **Open question**: is there a cleaner integration pattern we're missing? A Claude Code plugin rather than a copy-paste?
 
@@ -128,4 +128,4 @@ Critique is more useful than agreement. If you think we're wrong, tell us why.
 
 ---
 
-*CoMindLab Labs — Minds research, 2026.*
+*CoMindLab Labs — CognitiveMemory research, 2026.*

@@ -2,7 +2,7 @@
 
 ## Four tiers, by lifespan
 
-Memory in Minds is organised by how long things should live, not by what topic they cover.
+Memory in CognitiveMemory is organised by how long things should live, not by what topic they cover.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -84,7 +84,7 @@ The user can run this manually (`/document`) or wire it to a Stop hook for autom
 
 Not every correction becomes a permanent rule. That would lead to memory pollution and contradictions.
 
-Minds uses a 3-confirmation rule borrowed from scientific reasoning:
+CognitiveMemory uses a 3-confirmation rule borrowed from scientific reasoning:
 
 ```
 1st occurrence    → log as observation (not in memory yet)
@@ -141,7 +141,7 @@ patch the DB layer.
 
 Each file has frontmatter (name, type, description) and a body with the rule plus **why** and **how to apply**. The "why" is the most important field — it lets the mind judge edge cases instead of blindly following.
 
-## What Minds is NOT
+## What CognitiveMemory is NOT
 
 - **Not a vector database.** No embeddings, no similarity search. Plain markdown, loaded directly.
 - **Not fine-tuning.** The model doesn't change. Only the context does.
@@ -158,7 +158,7 @@ A [CLAUDE.md](https://docs.claude.com/en/docs/claude-code/memory) file is great 
 - Archive stale content — it just keeps growing until it's too big to be useful
 - Measure its own effectiveness — no feedback loop
 
-Minds adds all four. It's CLAUDE.md with a growth model.
+CognitiveMemory adds all four. It's CLAUDE.md with a growth model.
 
 ## Implementation footprint
 
@@ -167,20 +167,43 @@ The whole system, in files:
 ```
 .claude/
   hooks/
-    session-metrics.py      (~400 lines, measurement)
-    metrics-brain.py        (~250 lines, weekly analysis)
-  settings.json             (~50 lines, hook wiring)
+    memory-collector.py        (~350 lines, captures session signals)
+    memory-curator.py          (~400 lines, promotes hunches → heuristics)
+    session-metrics.py         (~400 lines, measurement)
+    metrics-brain.py           (~250 lines, weekly analysis)
+    session-start-health.py    (~50 lines, stale-consolidation warning)
+    memory-index-weekly.py     (optional, ~50 lines, weekly index gate)
+  skills/
+    cognitive-memory-setup.md  (the wizard, ~200 lines)
+    memory-index.md            (optional, indexing feature wizard)
+  settings.json                (~50 lines, hook wiring)
 memory/
-  MEMORY.md                 (index, grows with content)
-  working-memory.md         (~5KB budget, rolls over)
-  archive.md                (compressed history)
-  {topic}.md                (one per memory, N files)
-skills/
-  mind-setup.md             (the wizard, ~200 lines)
-CLAUDE.md                   (project conventions, unchanged)
+  MEMORY.md                    (index, grows with content)
+  working-memory.md            (~5KB budget, rolls over)
+  archive.md                   (compressed history)
+  {topic}.md                   (one per memory, N files)
+  INDEX.md                     (optional, auto-generated overview)
+tools/
+  memory_index_generate.py     (optional, ~200 lines, indexer)
+CLAUDE.md                      (project conventions, unchanged)
 ```
 
 Total added weight: ~2MB of markdown for a year of active use. Negligible next to `node_modules`.
+
+## Optional feature: Memory Index
+
+CognitiveMemory ships with an optional **memory-index** feature in a separate drop-in folder (`memory-index/` in the research repo). It's a regenerable, navigable overview of your structured memory — distinct from `memory/MEMORY.md`, which is the curated long-term *index of memories you have written*. The memory-index is *machine-generated* and answers a different question:
+
+| File | Hand-curated? | Source | Question it answers |
+|------|---------------|--------|---------------------|
+| `memory/MEMORY.md` | Yes (by curator hook) | All Tier 2 files | "What memories does the mind have?" |
+| `memory/INDEX.md` | No (regenerated weekly) | `memory/rules/` + `### Key Decisions` in working-memory | "What rules exist? What decisions have been made?" |
+
+The memory-index runs on a SessionStart hook, gated by a 7-day timestamp file. It writes a single flat `INDEX.md` grouped by source type (rules, decisions). Heuristics are intentionally excluded — they're operational reflex tables, not strategic memory worth indexing.
+
+**Why a separate feature, not part of core?** The core 4-tier system works without it. Memory-index is for users whose rules and decisions have grown enough that a navigable overview saves time. Install it when you feel the pain. Skip it if you don't.
+
+See `memory-index/README.md` for install + usage.
 
 ## Next
 
@@ -188,4 +211,4 @@ The architecture above is the mechanism. The next question is: **does it actuall
 
 ---
 
-*CoMindLab Labs — Minds research, 2026.*
+*CoMindLab Labs — CognitiveMemory research, 2026.*

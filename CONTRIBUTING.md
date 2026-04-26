@@ -1,11 +1,11 @@
 # Contributing
 
-Thanks for reading this far. We're publishing Minds as research and we want critique more than agreement.
+Thanks for reading this far. We're publishing CognitiveMemory as research and we want critique more than agreement.
 
 ## The easiest way to help
 
 1. **Install the [starter kit](starter-kit/)** in a Claude Code project.
-2. **Use it for two weeks.** Run `/mind-setup` once to seed it.
+2. **Use it for two weeks.** Run `/cognitive-memory-setup` once to seed it.
 3. **Run `python .claude/hooks/metrics-brain.py`** after two weeks.
 4. **Open an issue** with the report. Even better: include a sanitised copy of your `session-metrics.csv`.
 
@@ -54,4 +54,4 @@ MIT. By contributing, you agree your contributions are licensed under the same.
 
 ---
 
-*CoMindLab Labs — Minds research, 2026.*
+*CoMindLab Labs — CognitiveMemory research, 2026.*

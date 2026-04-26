@@ -1,4 +1,4 @@
-# Minds Starter Kit
+# CognitiveMemory Starter Kit
 
 The drop-in memory layer for [Claude Code](https://claude.com/claude-code).
 
@@ -10,7 +10,7 @@ The drop-in memory layer for [Claude Code](https://claude.com/claude-code).
     session-metrics.py       Captures session data on SessionEnd
     metrics-brain.py         Weekly analyser — writes daily-report.md
   skills/
-    mind-setup.md            Interactive setup wizard
+    cognitive-memory-setup.md  Interactive setup wizard
   settings.json.example      Hook wiring (rename or merge into yours)
 memory/
   MEMORY.md                  Long-term memory index
@@ -28,7 +28,7 @@ cp -r starter-kit/. your-project/
 cd your-project
 mv .claude/settings.json.example .claude/settings.json
 claude
-> /mind-setup
+> /cognitive-memory-setup
 ```
 
 Two commands + the wizard. Under 5 minutes.
@@ -41,7 +41,7 @@ Copy everything from the starter kit except `settings.json.example`:
 
 ```bash
 cp starter-kit/.claude/hooks/*.py your-project/.claude/hooks/
-cp starter-kit/.claude/skills/mind-setup.md your-project/.claude/skills/
+cp starter-kit/.claude/skills/cognitive-memory-setup.md your-project/.claude/skills/
 cp -r starter-kit/memory your-project/memory
 ```
 
@@ -54,7 +54,7 @@ Read memory/MEMORY.md for preferences, project lessons, and heuristics.
 Read memory/working-memory.md for this week's context.
 ```
 
-Then run `claude` and invoke `/mind-setup`.
+Then run `claude` and invoke `/cognitive-memory-setup`.
 
 ## Smoke test (30 seconds)
 
@@ -107,7 +107,7 @@ If you already have `hooks.SessionEnd`, append the session-metrics entry to the 
 
 ## What the wizard does
 
-`/mind-setup` uses Claude Code's `AskUserQuestion` tool to ask you 6 questions, then writes personalised files. It asks for:
+`/cognitive-memory-setup` uses Claude Code's `AskUserQuestion` tool to ask you 6 questions, then writes personalised files. It asks for:
 
 1. **Mind handle** — short lowercase name (`alex-dev`, `research-assistant`)
 2. **Role** — one sentence about what this mind does
@@ -156,13 +156,13 @@ Read [../03-findings.md](../03-findings.md) for what the data looked like in our
 
 ## Troubleshooting
 
-| Symptom                          | Likely cause               | Fix                                                                  |
-| -------------------------------- | -------------------------- | -------------------------------------------------------------------- |
-| Hook doesn't fire                | SessionEnd not wired       | Check `.claude/settings.json` has the hook block                     |
-| CSV has blank columns            | Old transcript format      | Newer transcripts populate correctly — just keep using               |
-| `/mind-setup` not found          | Skill not loaded           | Make sure `.claude/skills/mind-setup.md` exists; restart `claude`    |
-| Report says "not enough data"    | < 2 weeks of sessions      | Keep using. Report needs ≥30 sessions/week for stable signal         |
-| `python: command not found`      | Python 3 not on PATH       | Replace `python` with `python3` in `settings.json`                   |
+| Symptom                              | Likely cause          | Fix                                                                              |
+| ------------------------------------ | --------------------- | -------------------------------------------------------------------------------- |
+| Hook doesn't fire                    | SessionEnd not wired  | Check `.claude/settings.json` has the hook block                                 |
+| CSV has blank columns                | Old transcript format | Newer transcripts populate correctly — just keep using                           |
+| `/cognitive-memory-setup` not found  | Skill not loaded      | Make sure `.claude/skills/cognitive-memory-setup.md` exists; restart `claude`    |
+| Report says "not enough data"        | < 2 weeks of sessions | Keep using. Report needs ≥30 sessions/week for stable signal                     |
+| `python: command not found`          | Python 3 not on PATH  | Replace `python` with `python3` in `settings.json`                               |
 
 ## Who should use this
 
@@ -174,7 +174,7 @@ Read [../03-findings.md](../03-findings.md) for what the data looked like in our
 
 - You don't use Claude Code (this is CC-specific, not LLM-generic)
 - You need enterprise audit trails for memory changes (this is markdown on disk)
-- You want something with a UI — Minds is files and CLI
+- You want something with a UI — CognitiveMemory is files and CLI
 
 ## Contributing
 
@@ -182,4 +182,4 @@ See [../CONTRIBUTING.md](../CONTRIBUTING.md) and [../04-open-questions.md](../04
 
 ---
 
-*Minds starter kit v0.1 — MIT — CoMindLab Labs*
+*CognitiveMemory starter kit v0.1 — MIT — CoMindLab Labs*

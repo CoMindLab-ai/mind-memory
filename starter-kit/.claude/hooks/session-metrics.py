@@ -1,4 +1,4 @@
-"""Session metrics collector for Minds — measures whether memory helps you.
+"""Session metrics collector for CognitiveMemory — measures whether memory helps you.
 
 Parses the Claude Code JSONL transcript from the most recent session and
 extracts:
@@ -16,7 +16,7 @@ Invoked via SessionEnd hook. Can also be run standalone for ad-hoc analysis
 of the most recent transcript.
 
 Generic — no hard-coded mind names. Works for any mind the user defines via
-/mind-setup. MIT — CoMindLab Labs.
+/cognitive-memory-setup. MIT — CoMindLab Labs.
 """
 import csv
 import glob

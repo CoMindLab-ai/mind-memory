@@ -1,4 +1,4 @@
-# Minds — Memory for Claude Code
+# CognitiveMemory — Memory for Claude Code
 
 > **Give Claude Code a memory that gets better the more you use it.**
 
@@ -24,10 +24,10 @@ cp -r starter-kit/. your-project/
 cd your-project
 mv .claude/settings.json.example .claude/settings.json
 claude
-> /mind-setup
+> /cognitive-memory-setup
 ```
 
-The `/mind-setup` skill runs an interactive wizard that asks about your role, preferences, and recurring gotchas, then seeds the memory files with your answers. No blank-page paralysis. Takes ~5 minutes end-to-end.
+The `/cognitive-memory-setup` skill runs an interactive wizard that asks about your role, preferences, and recurring gotchas, then seeds the memory files with your answers. No blank-page paralysis. Takes ~5 minutes end-to-end.
 
 ## What's in this research folder
 
@@ -38,13 +38,14 @@ The `/mind-setup` skill runs an interactive wizard that asks about your role, pr
 | [03-findings.md](03-findings.md)                    | Honest data from 3 months of daily use. What we measured, what we found, what's still unknown      |
 | [04-open-questions.md](04-open-questions.md)        | What we don't know. Where we want critique                                                          |
 | [starter-kit/](starter-kit/)                        | The drop-in files. Copy these into your project                                                     |
+| [memory-index/](memory-index/)                      | Optional feature — regenerable overview index of rules and decisions                                |
 | [CONTRIBUTING.md](CONTRIBUTING.md)                  | How to engage                                                                                       |
 | [LICENSE](LICENSE)                                  | MIT                                                                                                  |
 
 ## Why this matters
 
-- **Context engineering beats prompt engineering.** The biggest lever for getting better output from an LLM isn't cleverer prompts — it's structured, persistent context. Static CLAUDE.md files were a good first step. Minds is the next one: a folder that grows with use.
-- **Memory makes an AI feel like a colleague, not a search box.** Your best coworker remembers the deploy that broke because someone forgot the feature flag, the argument about tabs vs spaces, that you prefer brevity over hedging. Minds gives Claude Code that kind of memory.
+- **Context engineering beats prompt engineering.** The biggest lever for getting better output from an LLM isn't cleverer prompts — it's structured, persistent context. Static CLAUDE.md files were a good first step. CognitiveMemory is the next one: a folder that grows with use.
+- **Memory makes an AI feel like a colleague, not a search box.** Your best coworker remembers the deploy that broke because someone forgot the feature flag, the argument about tabs vs spaces, that you prefer brevity over hedging. CognitiveMemory gives Claude Code that kind of memory.
 - **Every interaction teaches the system.** Corrections get captured. Confirmations get reinforced. Patterns that fire 3+ times get promoted from hunches to rules. Borrowed from [Andrej Karpathy's "LLM wiki" framing](https://x.com/karpathy/status/2039805659525644595).
 
 ## Who should use this
@@ -57,7 +58,7 @@ The `/mind-setup` skill runs an interactive wizard that asks about your role, pr
 
 - You don't use Claude Code (this is CC-specific, not LLM-generic)
 - You need enterprise audit trails for memory changes
-- You want a UI — Minds is files and CLI
+- You want a UI — CognitiveMemory is files and CLI
 
 ## Status
 
@@ -77,4 +78,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full list of what we're asking fo
 
 ---
 
-*CoMindLab Labs — Minds research, 2026.*
+*CoMindLab Labs — CognitiveMemory research, 2026.*

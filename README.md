@@ -2,7 +2,7 @@
 
 > **Give Claude Code a memory that gets better the more you use it.**
 
-A drop-in folder + two Python hooks that make Claude Code remember your corrections, preferences, and project lessons across sessions. Markdown-native. MIT. Installs in 5 minutes.
+A drop-in folder + a small set of Python hooks that make Claude Code remember your corrections, preferences, and project lessons across sessions. The hooks run continuously — collecting signals mid-session, promoting confirmed patterns to rules, measuring whether memory is helping you. Markdown-native. MIT. Installs in 5 minutes.
 
 ## The headline number
 
@@ -34,7 +34,7 @@ The `/cognitive-memory-setup` skill runs an interactive wizard that asks about y
 | File                                                | Purpose                                                                                            |
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | [01-concept.md](01-concept.md)                      | The idea — from agents to minds, why memory is context-engineering's next lever                    |
-| [02-memory-architecture.md](02-memory-architecture.md) | The 4-tier memory model, consolidation loop, Karpathy's wiki-as-learning pattern                |
+| [02-memory-architecture.md](02-memory-architecture.md) | The 4-tier memory model, three-loop self-maintenance, Karpathy's wiki-as-learning pattern       |
 | [03-findings.md](03-findings.md)                    | Honest data from 3 months of daily use. What we measured, what we found, what's still unknown      |
 | [04-open-questions.md](04-open-questions.md)        | What we don't know. Where we want critique                                                          |
 | [starter-kit/](starter-kit/)                        | The drop-in files. Copy these into your project                                                     |

@@ -53,9 +53,16 @@ Claude loads the index at session start. When a relevant topic comes up, it read
 
 ## The consolidation loop
 
-Memory gets better through a recurring loop: **collect signals during the session, consolidate at the end**.
+Memory gets better through **continuous self-maintenance** — three nested cycles, not a single end-of-session sweep.
 
-### Signals collected during session
+### Inner loop — mid-session, every N tool calls
+
+Two PostToolUse hooks fire automatically as you work:
+
+- **`memory-collector.py`** (every ~10 tool calls) — scans the live transcript since its last run, detects fresh signals, appends them to `working-memory.md`. Runs while context is still hot.
+- **`memory-curator.py`** (every ~25 tool calls, longer interval so it sees collector output) — reads the new signals, applies the promotion rules below, updates `MEMORY.md` and the per-topic files.
+
+The signals they detect:
 
 - **Corrections** — user disagreement, pushback, "no", "don't", "wrong"
 - **Confirmations** — user agreement, "yes exactly", "perfect, keep doing that"
@@ -63,22 +70,32 @@ Memory gets better through a recurring loop: **collect signals during the sessio
 - **Frustration markers** — strong negative language, "again?", "as I said"
 - **Repeated topics** — same correction fires 2+ times across a session
 
-These get detected by a hook that parses the session transcript. No ML, just pattern matching. Output: a structured summary of what was worth remembering.
+No ML, just pattern matching plus a short Claude call (`claude -p`) for the curator's promotion judgment.
 
-### Consolidation at session end
+### Promotion rules the curator applies
 
-A `/document` skill (or a session-end hook) runs the consolidation:
+1. New correction not in memory → add as **hunch** (tentative, labelled)
+2. Existing hunch confirmed 3rd time → promote to **heuristic** (permanent, applied)
+3. Heuristic contradicted → demote back to hunch, or archive with note
+4. Working-memory entries >5 days old → compress and move toward archive
 
-1. **Read working-memory.md** — what was already known
-2. **Read session signals** — corrections, confirmations, repeated topics
-3. **Propose updates**:
-   - New correction not in memory → add as hunch
-   - Existing hunch confirmed 3rd time → promote to heuristic
-   - Contradicted heuristic → flag for review
-   - Completed project → archive entries older than 5 days
-4. **Write back** — update working-memory.md, MEMORY.md, archive.md
+These run during the session. By the time you log off, the bulk of the maintenance is already done.
 
-The user can run this manually (`/document`) or wire it to a Stop hook for automatic end-of-session consolidation.
+### Middle loop — per session
+
+- **SessionStart**: load identity + `MEMORY.md` + `working-memory.md`. The `session-start-health.py` hook also fires here and warns if no consolidation has run in >7 days (catches a broken or unwired curator).
+- **SessionEnd**: `session-metrics.py` writes one row to `.claude/metrics/session-metrics.csv` capturing tool calls, productive edits, signals, memory state.
+
+The session bookend is for measurement and load/save, not for the heavy maintenance work — that already happened in the inner loop.
+
+### Outer loop — weekly, time-gated
+
+- **`metrics-brain.py`** — reads the CSV, computes the H1–H5 hypotheses, writes a `daily-report.md` so you can see whether memory is measurably helping you.
+- **`memory-index-weekly.py`** (optional) — regenerates `memory/INDEX.md` if 7+ days have passed since the last run.
+
+### Manual override
+
+If you want to force a full consolidation (e.g. after a major project change), the `/cognitive-memory-setup` skill can re-seed identity + memory from a fresh conversation, and a `/document` skill (if installed) runs an explicit end-to-end consolidation pass. The hooks remain the primary mechanism — these are the manual escape hatches.
 
 ## The "hunch → heuristic" promotion rule
 
@@ -145,7 +162,7 @@ Each file has frontmatter (name, type, description) and a body with the rule plu
 
 - **Not a vector database.** No embeddings, no similarity search. Plain markdown, loaded directly.
 - **Not fine-tuning.** The model doesn't change. Only the context does.
-- **Not a framework.** No SDK, no abstractions. Just files and two small Python hooks.
+- **Not a framework.** No SDK, no abstractions. Just files and a small set of Python hooks (collector, curator, session-metrics, metrics-brain, session-start-health).
 - **Not opaque.** You can read and edit every byte of what the system knows about you.
 - **Not scale-infinite.** Optimised for thousands of memories, not millions. If you need millions, use a real DB.
 

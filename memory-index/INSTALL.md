@@ -5,7 +5,7 @@ Two paths: wizard (recommended) and manual.
 ## Wizard install
 
 ```bash
-cp -r CognitiveMemory/. your-project/
+cp -r MindMemory/. your-project/
 cd your-project
 claude
 > /memory-index
@@ -31,7 +31,7 @@ If you prefer not to run the wizard:
 
 ```bash
 # 1. Copy the folder
-cp -r CognitiveMemory/. your-project/
+cp -r MindMemory/. your-project/
 cd your-project
 
 # 2. Copy the config
@@ -66,6 +66,6 @@ python tools/memory_index_generate.py
 To uninstall:
 
 1. Remove the SessionStart hook entry from `.claude/settings.json`.
-2. Delete the `CognitiveMemory/` folder.
+2. Delete the `MindMemory/` folder.
 
 No other state to clean up.

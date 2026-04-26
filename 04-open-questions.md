@@ -15,6 +15,7 @@ We promote a "hunch" to a "heuristic" after 3 occurrences. The number is arbitra
 ### 2. Is markdown the right representation?
 
 We chose markdown because it's:
+
 - Native to Claude (no retrieval step)
 - Human-readable and -editable
 - Narrative, not tabular (closer to how memory actually works)
@@ -28,6 +29,7 @@ But markdown doesn't scale to millions of entries. And it's unindexed — Claude
 Identity / Long-term / Working / Archive. Four tiers, organised by lifespan.
 
 Alternative decompositions we considered:
+
 - By **topic** (preferences / project / references / people) — clearer categories, harder to manage lifespan
 - By **confidence** (hunch / heuristic / rule) — closer to the learning loop, doesn't address lifespan
 - By **source** (user-stated / inferred / corrected) — provenance-aware, more complex
@@ -41,11 +43,13 @@ We picked lifespan because it maps cleanly onto "what do I load at session start
 H5 measures "% of sessions where the same correction fires 2+ times". Our thinking: memory should prevent that by surfacing the correction before it's needed again.
 
 Problems with H5:
+
 - Requires corrections to use specific language patterns to be detected
 - A correction that happens in the first session (before memory exists) doesn't count against memory
 - Doesn't capture the frustration the user described qualitatively
 
 Alternatives considered:
+
 - **Time-to-first-correction-in-a-session** — how long into a session before the user pushes back?
 - **Novel-correction rate** — how often is the user saying something the system "should have known"?
 - **User-reported frustration** (survey) — the gold standard, but expensive
@@ -63,6 +67,7 @@ The clean experiment: randomly suppress memory loading for half of sessions for 
 ### 6. Is the instrumentation honest?
 
 Our hooks detect:
+
 - Negative language (30 patterns, including profanity and "you keep doing X")
 - Positive language (14 patterns)
 - Repeated corrections (5 correction keywords, flagged when same keyword fires 2+ times)
@@ -84,6 +89,7 @@ Trade-off: shorter intervals catch insights closer to the moment they happened (
 ### 8. Who should do the consolidation — the mind or a separate agent?
 
 Two approaches:
+
 - **Self-consolidation**: the mind that just worked reviews its own transcript and updates its memory. Risk: same reasoning blindspots that produced the mistakes also produced the self-review.
 - **Critic consolidation**: a separate, fresh-context agent reviews the transcript. Less biased, but doesn't have the first-person perspective.
 
@@ -95,7 +101,7 @@ We currently use self-consolidation. Haven't tested critic.
 
 ### 9. Is the 5-minute install achievable in practice?
 
-We've optimised for "copy 3 files, run `/cognitive-memory-setup`, done". That's fast on a fresh project. On an existing Claude Code project with a customised `.claude/settings.json`, it's harder — merging hook config is a manual step.
+We've optimised for "copy 3 files, run `/mind-memory-setup`, done". That's fast on a fresh project. On an existing Claude Code project with a customised `.claude/settings.json`, it's harder — merging hook config is a manual step.
 
 **Open question**: is there a cleaner integration pattern we're missing? A Claude Code plugin rather than a copy-paste?
 
@@ -119,9 +125,9 @@ If you have takes on any of these:
 
 1. **GitHub issue** on the public repo (when published)
 2. **Email** to `hello@comindlab.ai` — we read everything
-3. **Tweet at us** (@comindlab) — shorter, more public
 
 We particularly want engagement from:
+
 - Researchers working on LLM memory (mem0, letta, MemGPT authors)
 - Claude Code power users with lots of sessions
 - Anyone who installs the starter kit and finds a failure mode we haven't documented
@@ -130,4 +136,4 @@ Critique is more useful than agreement. If you think we're wrong, tell us why.
 
 ---
 
-*CoMindLab Labs — CognitiveMemory research, 2026.*
+*CoMindLab — MindMemory research, 2026.*

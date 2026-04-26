@@ -1,9 +1,9 @@
 ---
-name: cognitive-memory-setup
-description: Interactive wizard that sets up a CognitiveMemory mind — identity, memory files, working memory, and user profile. First asks the scope (project / global / auto-split). Has two paths — quick (7 questions, ~5 min) or deep-dive (extra conversation after question 3, ~15-20 min). Archives existing files before any overwrite, never destructively modifies CLAUDE.md (uses a managed marker block instead). Use when the user runs /cognitive-memory-setup, says "set up a mind", "initialise memory", or starts with a fresh CognitiveMemory starter kit.
+name: mind-memory-setup
+description: Interactive wizard that sets up a MindMemory mind — identity, memory files, working memory, and user profile. First asks the scope (project / global / auto-split). Has two paths — quick (7 questions, ~5 min) or deep-dive (extra conversation after question 3, ~15-20 min). Archives existing files before any overwrite, never destructively modifies CLAUDE.md (uses a managed marker block instead). Use when the user runs /mind-memory-setup, says "set up a mind", "initialise memory", or starts with a fresh MindMemory starter kit.
 ---
 
-# CognitiveMemory Setup Wizard
+# MindMemory Setup Wizard
 
 You are walking a user through setting up a mind. Default path is brisk
 (~5 minutes). After question 3 you offer an optional deep-dive that
@@ -11,10 +11,10 @@ produces a richer personality (~15-20 minutes total).
 
 ## Step 0 — Scope question (BEFORE any other questions)
 
-Ask the user where this CognitiveMemory installation should live, via
+Ask the user where this MindMemory installation should live, via
 `AskUserQuestion`:
 
-> "Where should CognitiveMemory live?
+> "Where should MindMemory live?
 >
 > 1. **This project only** — installs to `./.claude/` and `./memory/` in this folder. Memory is project-specific. Re-run the wizard for every new project.
 > 2. **Global / personal** — installs to `~/.claude/` (your user-level Claude Code config). One memory layer that follows you across every project. Project-specific lessons land here too.
@@ -50,7 +50,7 @@ For Auto-split, scan BOTH `./` and `~/.claude/` per the table above.
 
 **If ANY of these exist (other than CLAUDE.md)**, surface them upfront via `AskUserQuestion`:
 
-> "I found existing CognitiveMemory files. What should I do with them?
+> "I found existing MindMemory files. What should I do with them?
 >
 > 1. **Archive then overwrite** (recommended) — copy ALL existing files into a single archive folder, then write fresh files
 > 2. **Overwrite without archive** — replace files directly (destructive, no recovery)
@@ -61,7 +61,7 @@ For Auto-split, scan BOTH `./` and `~/.claude/` per the table above.
 
 If the user picks **Archive then overwrite**:
 
-1. Compute archive directory: `<scope>/.cognitive-memory-archive/{YYYY-MM-DD-HHMM}/` (use actual current time)
+1. Compute archive directory: `<scope>/.mind-memory-archive/{YYYY-MM-DD-HHMM}/` (use actual current time)
 2. Create the directory
 3. For every file the wizard would write, if it already exists at the target path, **copy** (not move — preserve original until success) the original into the archive directory, preserving the relative path inside the archive (e.g. `memory/MEMORY.md` → `<archive>/memory/MEMORY.md`)
 4. After ALL copies succeed, proceed with overwriting the originals
@@ -83,9 +83,9 @@ If the user picks **Cancel**: stop here, change nothing.
 - If `CLAUDE.md` exists, find the marker block:
 
   ```markdown
-  <!-- CognitiveMemory: BEGIN (do not edit by hand — managed by /cognitive-memory-setup) -->
+  <!-- MindMemory: BEGIN (do not edit by hand — managed by /mind-memory-setup) -->
   ...managed content...
-  <!-- CognitiveMemory: END -->
+  <!-- MindMemory: END -->
   ```
 
   - If the marker block exists: replace its contents in place (idempotent — re-running the wizard updates the block, never duplicates it)

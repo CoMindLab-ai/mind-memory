@@ -1,7 +1,7 @@
 # Working Memory
 
 ## Current Focus
-Sample working memory shipped with CognitiveMemory. Replace with your own.
+Sample working memory shipped with MindMemory. Replace with your own.
 
 ## Recent Sessions
 The indexer ignores this section.

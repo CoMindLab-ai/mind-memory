@@ -1,14 +1,14 @@
 ---
 name: memory-index
-description: Set up or run the CognitiveMemory weekly memory index. Use when the user says "memory-index", "/memory-index", "set up memory index", "regenerate memory index", or "show me the memory index status".
+description: Set up or run the MindMemory weekly memory index. Use when the user says "memory-index", "/memory-index", "set up memory index", "regenerate memory index", or "show me the memory index status".
 metadata:
-  author: CognitiveMemory
+  author: MindMemory
   version: 0.1.0
 ---
 
 # memory-index
 
-Interactive wizard for the CognitiveMemory memory-index feature. Configures sources, registers the SessionStart hook, runs the generator, and shows the result.
+Interactive wizard for the MindMemory memory-index feature. Configures sources, registers the SessionStart hook, runs the generator, and shows the result.
 
 ## When to invoke
 

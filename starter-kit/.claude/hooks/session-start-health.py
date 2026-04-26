@@ -1,4 +1,4 @@
-"""SessionStart health check for CognitiveMemory.
+"""SessionStart health check for MindMemory.
 
 Runs on SessionStart. Reads memory/.last-consolidation.json and emits a
 system reminder if the curator hasn't run successfully in >7 days.
@@ -21,7 +21,7 @@ LAST_RUN_FILE = os.path.join(os.getcwd(), "memory", ".last-consolidation.json")
 
 def main():
     if not os.path.isdir(os.path.join(os.getcwd(), "memory")):
-        sys.exit(0)  # not a CognitiveMemory project
+        sys.exit(0)  # not a MindMemory project
 
     try:
         with open(LAST_RUN_FILE, "r", encoding="utf-8") as f:

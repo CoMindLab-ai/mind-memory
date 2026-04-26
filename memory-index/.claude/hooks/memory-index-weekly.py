@@ -1,4 +1,4 @@
-"""SessionStart hook — weekly CognitiveMemory index regeneration.
+"""SessionStart hook — weekly MindMemory index regeneration.
 
 Runs on every Claude Code session start. Gates by timestamp file: only
 regenerates INDEX.md if the last run was more than 7 days ago. Spawns the

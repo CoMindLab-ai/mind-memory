@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MindMemory — Technical Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAF7F2;
+    --panel: #FFFFFF;
+    --text: #0E1B2C;
+    --text-2: #5B6675;
+    --border: #E8E2D6;
+    --teal: #C84A35;
+    --teal-soft: #FBEAE4;
+    --slate: #1F3A5F;
+    --slate-soft: #E5EAF1;
+    --amber: #B8862A;
+    --amber-soft: #F8EFD8;
+    --green: #3F7A52;
+    --green-soft: #E6EFE8;
+    --red: #B23A2E;
+    --red-soft: #F7E5E1;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: "ss02";
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 10.5pt;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 28px; }
+  .cover { border-bottom: 2px solid var(--slate); padding-bottom: 18px; margin-bottom: 24px; }
+  .wordmark { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px 4px 8px; border: 1px solid var(--border); border-radius: 6px; font-weight: 600; font-size: 11pt; }
+  .wordmark-dot { width: 12px; height: 12px; border-radius: 3px; background: var(--teal); position: relative; }
+  .wordmark-dot::after { content:""; position:absolute; inset:3px; border-radius:1px; background: var(--bg); }
+  .kicker { font-family: var(--mono); font-size: 9pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); margin-top: 18px; }
+  h1 { font-size: 24pt; font-weight: 600; letter-spacing: -0.02em; margin: 8px 0 6px; line-height: 1.1; }
+  .deck { color: var(--text-2); font-size: 12pt; max-width: 620px; margin: 0; }
+  .meta { font-size: 9pt; color: var(--text-2); margin-top: 14px; font-family: var(--mono); }
+  h2 { font-size: 14pt; font-weight: 600; letter-spacing: -0.01em; margin: 28px 0 8px; padding-top: 14px; border-top: 1px solid var(--border); }
+  h2 .num { color: var(--teal); font-family: var(--mono); font-size: 10.5pt; margin-right: 8px; }
+  h3 { font-size: 11.5pt; font-weight: 600; margin: 18px 0 6px; }
+  p { margin: 0 0 9px; }
+  ul, ol { margin: 0 0 11px; padding-left: 20px; }
+  li { margin: 3px 0; }
+  code, .mono { font-family: var(--mono); font-size: 9.5pt; background: var(--slate-soft); padding: 1px 5px; border-radius: 3px; color: var(--slate); }
+  pre { background: #0E1B2C; color: #E8E2D6; padding: 12px 14px; border-radius: 6px; font-family: var(--mono); font-size: 9pt; line-height: 1.5; overflow-x: auto; margin: 10px 0; }
+  pre code { background: transparent; color: inherit; padding: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10pt; }
+  th, td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: var(--slate-soft); font-weight: 600; font-size: 9.5pt; }
+  .pull { background: var(--slate-soft); border-left: 3px solid var(--slate); padding: 12px 14px; margin: 16px 0; border-radius: 4px; font-size: 11pt; }
+  .pull strong { color: var(--slate); }
+  .figure { margin: 18px 0; padding: 0; }
+  .figure img { width: 100%; border: 1px solid var(--border); border-radius: 6px; }
+  .figure-cap { font-size: 9pt; color: var(--text-2); margin-top: 6px; text-align: center; font-style: italic; }
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+  .stat { border: 1px solid var(--border); border-radius: 6px; padding: 10px; background: var(--panel); }
+  .stat-label { font-family: var(--mono); font-size: 8.5pt; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-num { font-size: 18pt; font-weight: 600; margin-top: 2px; line-height: 1.1; }
+  .stat-vs { font-family: var(--mono); font-size: 9pt; color: var(--text-2); }
+  .stat.win .stat-num, .stat.win .stat-label { color: var(--green); }
+  .stat.null .stat-num, .stat.null .stat-label { color: var(--red); }
+  .footer-bar { margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 9pt; color: var(--text-2); display: flex; justify-content: space-between; gap: 12px; }
+  a { color: var(--slate); text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 2px; }
+  .small { font-size: 9pt; color: var(--text-2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="cover">
+    <span class="wordmark"><span class="wordmark-dot"></span><span>MindMemory</span></span>
+    <div class="kicker">Technical brief · for engineers and researchers</div>
+    <h1>Memory for Claude Code.</h1>
+    <p class="deck">A drop-in folder + Python hooks that give Claude Code a regenerable, markdown-native memory layer with continuous self-maintenance and a built-in measurement harness.</p>
+    <div class="meta">CoMindLab Labs · Research preview · MIT · April 2026</div>
+  </header>
+
+  <h2><span class="num">01</span>What it is</h2>
+
+  <p>MindMemory is a portable memory layer for Claude Code. Three primitives:</p>
+
+  <ul>
+    <li><strong>Markdown files</strong> in a structured layout — no vector DB, no service.</li>
+    <li><strong>Five Python hooks</strong> wired to Claude Code's PostToolUse, SessionStart, and SessionEnd events.</li>
+    <li><strong>One setup wizard skill</strong> that bootstraps a project with the right structure in ~5 minutes.</li>
+  </ul>
+
+  <p>Total dependencies: zero. Standard library only. Read the source — it's the entire system.</p>
+
+  <p>Repository: <a href="https://github.com/CoMindLab-ai/mind-memory">github.com/CoMindLab-ai/mind-memory</a></p>
+
+  <h2><span class="num">02</span>Architecture (visual)</h2>
+
+  <div class="figure">
+    <img src="MindMemory.png" alt="MindMemory architecture — 4 panels covering concept, memory tiers, self-maintenance loops, and findings.">
+    <div class="figure-cap">Figure 1. Single-page architecture reference. Source: <a href="MindMemory.html">MindMemory.html</a> in the repo.</div>
+  </div>
+
+  <h2><span class="num">03</span>The four tiers</h2>
+
+  <p>Memory is organised by <strong>lifespan</strong>, not by topic. This maps cleanly onto "what gets loaded at session start" vs "what gets retrieved on demand" vs "what stays out of context entirely."</p>
+
+  <table>
+    <thead><tr><th>Tier</th><th>File</th><th>Lifespan</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td>1 · Identity</td><td><code>identity/anchor.md</code></td><td>Read-only</td><td>Personality. Hard rules. Loaded every session.</td></tr>
+      <tr><td>2 · Long-term</td><td><code>memory/MEMORY.md</code> + <code>{topic}.md</code></td><td>Weeks+</td><td>Confirmed patterns. Indexed — index always loaded, details on demand.</td></tr>
+      <tr><td>3 · Working</td><td><code>memory/working-memory.md</code></td><td>Days</td><td>This week's focus. Token-budgeted (~5KB). Rolls into Tier 2 or 4.</td></tr>
+      <tr><td>4 · Archive</td><td><code>memory/archive.md</code></td><td>Rarely read</td><td>Compressed historical context. Searchable, not loaded by default.</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>The promotion rule.</strong> Borrowed from scientific reasoning to keep memory curated:</p>
+
+  <ol>
+    <li><strong>1×</strong> — observation, logged but not in memory</li>
+    <li><strong>2×</strong> — hunch (tentative, labelled in working memory)</li>
+    <li><strong>3×</strong> — heuristic (promoted to Tier 2, applied)</li>
+    <li><strong>Contradicted</strong> — demoted to hunch or archived with note</li>
+  </ol>
+
+  <p>Each Tier-2 entry stores both <strong>why</strong> (the reasoning behind the rule) and <strong>how to apply</strong> (concrete trigger). The "why" lets the model judge edge cases instead of blindly applying.</p>
+
+  <h2><span class="num">04</span>The three loops — continuous self-maintenance</h2>
+
+  <p>Most "AI memory" systems consolidate at session end. MindMemory's defining design choice: <strong>memory curates itself mid-session</strong>, not just at logoff.</p>
+
+  <pre><code>INNER LOOP   every ~10–25 tool calls (PostToolUse hook)
+  memory-collector → scan transcript, capture signals
+  memory-curator   → promote / demote per 3× rule
+
+MIDDLE LOOP  per session
+  SessionStart → load identity + MEMORY.md + working-memory
+  SessionEnd   → write metrics row to CSV
+
+OUTER LOOP   weekly (7-day timestamp gate)
+  metrics-brain      → compute H1–H5, write daily-report.md
+  memory-index       → regenerate INDEX.md (optional feature)</code></pre>
+
+  <p><strong>Why nest them?</strong> By the time a session ends, the model has drifted from the moment of insight. The inner loop catches corrections within minutes, producing tighter, more specific rules than catching them hours later. Bookends and weekly review are safety nets and measurement.</p>
+
+  <h2><span class="num">05</span>The signals collector + curator detect</h2>
+
+  <table>
+    <thead><tr><th>Signal</th><th>Pattern</th><th>What it triggers</th></tr></thead>
+    <tbody>
+      <tr><td>Correction</td><td>"no", "wrong", "don't do that"</td><td>Candidate new heuristic</td></tr>
+      <tr><td>Confirmation</td><td>"yes exactly", "perfect", "keep doing that"</td><td>Reinforce existing approach</td></tr>
+      <tr><td>Follow-through</td><td>User accepts output without changes</td><td>Silent confirmation</td></tr>
+      <tr><td>Frustration</td><td>"again?", "as I said", strong negative language</td><td>Escalate severity in working memory</td></tr>
+      <tr><td>Repeated topic</td><td>Same correction 2+ times in a session</td><td>Auto-promote to hunch</td></tr>
+    </tbody>
+  </table>
+
+  <p>Pattern-matching only — no LLM call inside the collector. The curator does call <code>claude -p</code> for promotion judgment when a hunch hits 3× confirmation, because that's where world-knowledge actually helps.</p>
+
+  <h2><span class="num">06</span>Measurement — the H1–H5 hypotheses</h2>
+
+  <p>Every install ships with a measurement harness. Five hypotheses, computed from the session-metrics CSV:</p>
+
+  <ul>
+    <li><strong>H1</strong> — Production ratio: productive_calls / total_calls (↑ if memory helps)</li>
+    <li><strong>H2</strong> — Orientation: exploration calls before first edit (↓ if memory helps)</li>
+    <li><strong>H3</strong> — Agent efficiency: agent delegations / total calls (↓ if memory helps)</li>
+    <li><strong>H4</strong> — Density: productive calls per session (↑ if memory helps)</li>
+    <li><strong>H5</strong> — Repeat-correction rate: % sessions with repeated corrections (↓ if memory helps) — <em>primary outcome</em></li>
+  </ul>
+
+  <p>Run <code>python .claude/hooks/metrics-brain.py</code> after two weeks of use to see your own H1–H5. The system measures itself; users self-test whether memory is actually helping their work.</p>
+
+  <h2><span class="num">07</span>Findings — three months of data</h2>
+
+  <p>Author dataset: 9,869 sessions over 12 weeks. Matched cohort (≥30 tool calls, post-instrumentation): 71 with memory loaded vs 21 without.</p>
+
+  <div class="stat-row">
+    <div class="stat win"><div class="stat-label">H1 Production</div><div class="stat-num">2.2×</div><div class="stat-vs">18.5% vs 8.5%</div></div>
+    <div class="stat win"><div class="stat-label">H2 Orient</div><div class="stat-num">−10%</div><div class="stat-vs">14.6 vs 16.3</div></div>
+    <div class="stat win"><div class="stat-label">H4 Density</div><div class="stat-num">4.3×</div><div class="stat-vs">26.0 vs 6.0</div></div>
+    <div class="stat null"><div class="stat-label">H5 Repeat</div><div class="stat-num">Null</div><div class="stat-vs">19.7% vs 14.3%</div></div>
+  </div>
+
+  <p><strong>What's robust:</strong> H1, H2, H4 are large effects, robust to a sensitivity check excluding the W15 merge window (where a parallel-implementation merge inflated repeat-corrections regardless of memory state).</p>
+
+  <p><strong>What's null:</strong> H5 — the headline outcome — has not been demonstrated. Three honest theories in the findings doc:</p>
+
+  <ul>
+    <li><strong>Selection bias</strong> — memory loads on harder sessions; the control group is biased toward easy work</li>
+    <li><strong>Coverage gap</strong> — memory doesn't have the right lessons yet</li>
+    <li><strong>Recall gap</strong> — memory exists but isn't applied under pressure</li>
+  </ul>
+
+  <p>Cannot separate them with current n. Publishing the result is itself the contribution: <strong>the system that measures itself is the only honest way to test "does memory in AI work?"</strong></p>
+
+  <div class="pull"><strong>The interesting bit for reviewers:</strong> the qualitative report from the n=1 user ("you remembering things helps me") is consistent with H1/H2/H4 but invisible to H5. Format/pacing preferences (dyslexia, visual-learner) get used silently every session — no "wrong"/"again" language fires. The most valuable memory is the kind H5 can't detect.</div>
+
+  <h2><span class="num">08</span>Install — three commands</h2>
+
+  <pre><code>cp -r starter-kit/. your-project/
+cd your-project
+mv .claude/settings.json.example .claude/settings.json
+claude
+> /mind-memory-setup</code></pre>
+
+  <p>The wizard asks 7 questions (with deep-dive opt-in for richer personality), respects existing files via an archive mechanism, never destructively modifies <code>CLAUDE.md</code> (uses a managed marker block), and writes to project-only / global / auto-split scope per your choice.</p>
+
+  <h2><span class="num">09</span>What we want from reviewers</h2>
+
+  <ol>
+    <li><strong>Critique the experimental design.</strong> If H5 is the wrong primary outcome, tell us what's better. <code>04-open-questions.md</code> has the full list.</li>
+    <li><strong>Run it on your work, share the CSV.</strong> One user's data is anecdotal. Twenty users' data starts to be evidence.</li>
+    <li><strong>Find counter-examples.</strong> "I put this in memory and Claude still didn't apply it" is gold. Specific cases beat general theories.</li>
+  </ol>
+
+  <h2><span class="num">10</span>Lineage and license</h2>
+
+  <p>The kernel is Andrej Karpathy's <a href="https://x.com/karpathy/status/2039805659525644595">LLM Wiki framing</a> — an agent that writes down what worked and what didn't in structured natural language, then reads it back. Not fine-tuning, not vector search. Just a curated, ever-improving wiki the agent maintains.</p>
+
+  <p>MindMemory implements that loop in the smallest possible form, plus measurement, plus a self-maintenance architecture that runs continuously rather than at session bookends.</p>
+
+  <p>MIT licensed. Repository, install instructions, full findings, and open questions: <a href="https://github.com/CoMindLab-ai/mind-memory">github.com/CoMindLab-ai/mind-memory</a></p>
+
+  <div class="footer-bar">
+    <span>CoMindLab Labs · MindMemory · Research preview · MIT</span>
+    <span>github.com/CoMindLab-ai/mind-memory</span>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html><html lang="en"><head>
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MindMemory — visual model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAF7F2;
+    --panel: #FFFFFF;
+    --text: #0E1B2C;
+    --text-2: #5B6675;
+    --border: #E8E2D6;
+    --border-strong: #D6CFBF;
+    --teal: #C84A35;
+    --teal-soft: #FBEAE4;
+    --slate: #1F3A5F;
+    --slate-soft: #E5EAF1;
+    --amber: #B8862A;
+    --amber-soft: #F8EFD8;
+    --green: #3F7A52;
+    --green-soft: #E6EFE8;
+    --red: #B23A2E;
+    --red-soft: #F7E5E1;
+    --mute: #9A9385;
+    --mute-soft: #F1ECE2;
+    --shadow: 0 1px 3px rgba(14,27,44,0.05);
+    --shadow-lift: 0 4px 14px rgba(200,74,53,0.12), 0 1px 3px rgba(14,27,44,0.05);
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif; font-feature-settings: "ss02", "cv11"; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; line-height: 1.5; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 48px 32px 64px; }
+  .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
+  .top-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .wordmark { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); box-shadow: var(--shadow); font-weight: 600; letter-spacing: -0.01em; }
+  .wordmark-dot { width: 14px; height: 14px; border-radius: 4px; background: var(--teal); position: relative; }
+  .wordmark-dot::after { content:""; position:absolute; inset:3px; border-radius:2px; background: var(--bg); }
+  .wordmark-text { font-size: 14px; }
+  .tagline { color: var(--text-2); font-size: 13px; }
+  .panel + .panel { margin-top: 56px; }
+  .panel-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .panel-tag { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; }
+  .panel-title { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .panel-sub { color: var(--text-2); font-size: 14px; margin: 0 0 24px; margin-top: -8px; max-width: 640px; }
+  .divider { height: 1px; background: var(--border); margin: 56px 0 0; }
+  .evo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; position: relative; }
+  .evo::before { content: ""; position: absolute; left: 10%; right: 10%; top: 48px; height: 1px; background-image: linear-gradient(to right, var(--border) 50%, transparent 50%); background-size: 8px 1px; z-index: 0; }
+  .card { position: relative; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px 20px 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; min-height: 270px; }
+  .card-idx { position: absolute; top: 12px; right: 12px; font-family: var(--mono); font-size: 10px; color: var(--text-2); letter-spacing: 0.05em; }
+  .card-icon { width: 40px; height: 40px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: var(--mute-soft); color: var(--text); border: 1px solid var(--border); }
+  .card-icon svg { width: 20px; height: 20px; }
+  .card-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+  .card-label { font-family: var(--mono); font-size: 11px; color: var(--text-2); background: var(--mute-soft); padding: 2px 6px; border-radius: 4px; display: inline-block; width: fit-content; }
+  .attrs { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .attrs li { font-size: 12.5px; color: var(--text); display: flex; gap: 8px; align-items: flex-start; line-height: 1.4; }
+  .attrs li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--text-2); margin-top: 7px; flex: 0 0 4px; }
+  .attrs li .dim { color: var(--text-2); }
+  .card.mind { border: 1.5px solid var(--teal); box-shadow: var(--shadow-lift); transform: translateY(-6px); }
+  .card.mind .card-icon { background: var(--teal-soft); border-color: var(--teal); color: var(--teal); }
+  .card.mind .card-idx { color: var(--teal); font-weight: 600; }
+  .card.mind .card-label { background: var(--teal-soft); color: var(--teal); }
+  .badge { position: absolute; top: -10px; left: 16px; background: var(--teal); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-family: var(--mono); }
+  .card.aspire { border-style: dashed; background: transparent; box-shadow: none; }
+  .card.aspire .card-icon, .card.aspire .card-label, .card.aspire .card-title, .card.aspire .attrs li { color: var(--mute); }
+  .card.aspire .attrs li::before { background: var(--mute); }
+  .card.aspire .card-icon { background: transparent; border-color: var(--border); }
+  .caption { margin-top: 20px; font-size: 13.5px; color: var(--text-2); text-align: center; line-height: 1.55; max-width: 760px; margin-left: auto; margin-right: auto; }
+  .caption strong { color: var(--text); font-weight: 600; }
+  .caption .k { font-family: var(--mono); font-size: 12.5px; color: var(--teal); background: var(--teal-soft); padding: 1px 6px; border-radius: 4px; }
+  .tiers-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
+  .subpanel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 16px; }
+  .subpanel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .subpanel-title { font-size: 14px; font-weight: 600; margin: 0; letter-spacing: -0.005em; }
+  .subpanel-key { font-family: var(--mono); font-size: 10.5px; color: var(--text-2); letter-spacing: 0.04em; text-transform: uppercase; }
+  .tiers { display: flex; flex-direction: column; gap: 8px; }
+  .tier { position: relative; display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); }
+  .tier-num { font-family: var(--mono); font-size: 11px; color: var(--text-2); text-align: center; }
+  .tier-body { min-width: 0; }
+  .tier-name { font-size: 13.5px; font-weight: 600; letter-spacing: -0.005em; }
+  .tier-meta { font-size: 11.5px; color: var(--text-2); margin-top: 2px; line-height: 1.4; }
+  .tier-file { font-family: var(--mono); font-size: 11.5px; color: var(--text-2); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tier-life { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 7px; border-radius: 4px; border: 1px solid var(--border); color: var(--text-2); background: var(--bg); white-space: nowrap; }
+  .tier::before { content: ""; position: absolute; left: -1px; top: -1px; bottom: -1px; width: 3px; border-radius: 8px 0 0 8px; }
+  .tier.t1 { background: linear-gradient(to right, var(--teal-soft), var(--panel) 40%); }
+  .tier.t1::before { background: var(--teal); }
+  .tier.t1 .tier-life { color: var(--teal); border-color: var(--teal); background: var(--teal-soft); }
+  .tier.t2 { background: linear-gradient(to right, var(--slate-soft), var(--panel) 40%); margin-left: 6px; }
+  .tier.t2::before { background: var(--slate); }
+  .tier.t2 .tier-life { color: var(--slate); border-color: var(--slate); background: var(--slate-soft); }
+  .tier.t3 { background: linear-gradient(to right, var(--amber-soft), var(--panel) 40%); margin-left: 12px; }
+  .tier.t3::before { background: var(--amber); }
+  .tier.t3 .tier-life { color: var(--amber); border-color: var(--amber); background: var(--amber-soft); }
+  .tier.t4 { background: var(--mute-soft); margin-left: 18px; border-style: dashed; }
+  .tier.t4::before { background: var(--mute); }
+  .tier.t4 .tier-name, .tier.t4 .tier-file, .tier.t4 .tier-meta { color: var(--mute); }
+  .tier.t4 .tier-life { color: var(--mute); }
+  .promo-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+  .promo-step { position: relative; display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 10px 0; align-items: flex-start; }
+  .promo-step + .promo-step { border-top: 1px dashed var(--border); }
+  .promo-num { font-family: var(--mono); font-size: 10.5px; color: var(--text-2); width: 28px; height: 22px; border: 1px solid var(--border); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; background: var(--bg); margin-top: 1px; }
+  .promo-body { font-size: 12.5px; line-height: 1.5; }
+  .promo-label { font-weight: 600; color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+  .pill { display: inline-block; font-family: var(--mono); font-size: 10.5px; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); color: var(--text-2); background: var(--bg); letter-spacing: 0.02em; }
+  .pill.observation { color: var(--text-2); }
+  .pill.hunch { color: var(--amber); border-color: var(--amber); background: var(--amber-soft); }
+  .pill.heuristic { color: var(--teal); border-color: var(--teal); background: var(--teal-soft); }
+  .pill.demote { color: var(--red); border-color: var(--red); background: var(--red-soft); }
+  .promo-desc { color: var(--text-2); display: block; margin-top: 2px; }
+  .loops { display: flex; flex-direction: column; gap: 14px; }
+  .loop { position: relative; border-radius: 12px; border: 1px solid var(--border); padding: 18px 20px 18px 22px; background: var(--panel); box-shadow: var(--shadow); }
+  .loop::before { content: ""; position: absolute; left: -1px; top: 8px; bottom: 8px; width: 4px; border-radius: 4px; }
+  .loop.inner::before { background: var(--teal); }
+  .loop.middle::before { background: var(--slate); }
+  .loop.outer::before { background: var(--amber); }
+  .loop-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .loop-kicker { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 7px; border-radius: 4px; border: 1px solid var(--border); color: var(--text-2); background: var(--bg); }
+  .loop.inner .loop-kicker { color: var(--teal); border-color: var(--teal); background: var(--teal-soft); }
+  .loop.middle .loop-kicker { color: var(--slate); border-color: var(--slate); background: var(--slate-soft); }
+  .loop.outer .loop-kicker { color: var(--amber); border-color: var(--amber); background: var(--amber-soft); }
+  .loop-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+  .loop-cadence { color: var(--text-2); font-size: 12.5px; }
+  .loop-body { display: grid; grid-template-columns: minmax(0, 1.1fr) auto minmax(0, 1.1fr); gap: 14px; align-items: stretch; }
+  @media (max-width: 760px) { .loop-body { grid-template-columns: 1fr; } .loop-arrow { display: none; } }
+  .step { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .step-head { display: flex; align-items: center; gap: 8px; }
+  .step-icon { width: 26px; height: 26px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: var(--panel); color: var(--text); flex: 0 0 26px; }
+  .step-icon svg { width: 14px; height: 14px; }
+  .loop.inner .step-icon { background: var(--teal-soft); color: var(--teal); border-color: var(--teal); }
+  .loop.middle .step-icon { background: var(--slate-soft); color: var(--slate); border-color: var(--slate); }
+  .loop.outer .step-icon { background: var(--amber-soft); color: var(--amber); border-color: var(--amber); }
+  .step-name { font-size: 13px; font-weight: 600; }
+  .step-hook { font-family: var(--mono); font-size: 10.5px; color: var(--text-2); margin-left: auto; background: var(--mute-soft); padding: 1px 5px; border-radius: 3px; }
+  .step-desc { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+  .step-desc b { color: var(--text); font-weight: 600; }
+  .signals { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+  .sig { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-family: var(--mono); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); background: var(--panel); color: var(--text-2); }
+  .sig .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .sig.c .dot { background: var(--red); }
+  .sig.o .dot { background: var(--green); }
+  .sig.f .dot { background: var(--slate); }
+  .sig.r .dot { background: var(--amber); }
+  .loop-arrow { align-self: center; color: var(--text-2); display: inline-flex; align-items: center; justify-content: center; }
+  .loop-arrow svg { width: 22px; height: 22px; }
+  .loop-foot { margin-top: 12px; font-size: 12px; color: var(--text-2); line-height: 1.5; padding-top: 10px; border-top: 1px dashed var(--border); }
+  .loop-foot b { color: var(--text); font-weight: 600; }
+  .loop-foot code { font-family: var(--mono); font-size: 11.5px; background: var(--mute-soft); padding: 1px 5px; border-radius: 3px; }
+  .findings { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 24px; box-shadow: var(--shadow); }
+  .findings-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 4px; }
+  @media (max-width: 760px) { .findings-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat { border: 1px solid var(--border); border-radius: 8px; padding: 14px; background: var(--bg); display: flex; flex-direction: column; gap: 4px; }
+  .stat-h { font-family: var(--mono); font-size: 10.5px; color: var(--text-2); letter-spacing: 0.04em; }
+  .stat-name { font-size: 12.5px; color: var(--text); font-weight: 500; margin-top: 2px; line-height: 1.35; }
+  .stat-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 8px; }
+  .stat-big { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); font-variant-numeric: tabular-nums; }
+  .stat-vs { font-family: var(--mono); font-size: 11px; color: var(--text-2); }
+  .stat.win .stat-big { color: var(--green); }
+  .stat.win .stat-h { color: var(--green); }
+  .stat.null .stat-big { color: var(--red); }
+  .stat.null .stat-h { color: var(--red); }
+  .stat-tag { font-family: var(--mono); font-size: 10px; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); color: var(--text-2); background: var(--panel); width: fit-content; margin-top: 6px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .stat.win .stat-tag { color: var(--green); border-color: var(--green); background: var(--green-soft); }
+  .stat.null .stat-tag { color: var(--red); border-color: var(--red); background: var(--red-soft); }
+  .findings-foot { margin-top: 16px; font-size: 12.5px; color: var(--text-2); line-height: 1.55; }
+  .findings-foot b { color: var(--text); }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-2); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  @media (max-width: 920px) { .evo { grid-template-columns: repeat(2, 1fr); } .evo::before { display: none; } .card.mind { transform: none; } .tiers-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .wrap { padding: 32px 20px 48px; } .evo { grid-template-columns: 1fr; } .panel-title { font-size: 20px; } .top { flex-direction: column; align-items: flex-start; } }
+</style>
+</head>
+<body>
+<main class="wrap" role="main">
+  <header class="top">
+    <div class="top-left">
+      <span class="wordmark"><span class="wordmark-dot"></span><span class="wordmark-text">MindMemory</span></span>
+      <span class="tagline">Memory for Claude Code that gets better the more you use it.</span>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="panel-head"><span class="panel-tag">Panel A · Concept</span><h2 class="panel-title">From agents to minds.</h2></div>
+    <p class="panel-sub">Capability has plateaued; <strong style="color:var(--text)">memory is the next lever</strong>. A "mind" is identity + memory + heuristics, wired together as one markdown construct.</p>
+    <div class="evo">
+      <article class="card"><span class="card-idx">01</span><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"></path></svg></span><h3 class="card-title">Agents</h3><span class="card-label">stateless</span><ul class="attrs"><li>High capability per call</li><li><span class="dim">No memory</span></li><li><span class="dim">No personality</span></li><li>Transactional</li></ul></article>
+      <article class="card"><span class="card-idx">02</span><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5-5-5"></path><path d="M12 19h8"></path></svg></span><h3 class="card-title">Claude Code today</h3><span class="card-label">session-scoped</span><ul class="attrs"><li>High capability</li><li>Session-only memory</li><li>Thin prompted personality</li><li>Transactional</li></ul></article>
+      <article class="card mind"><span class="badge">MindMemory</span><span class="card-idx">03</span><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3a2.5 2.5 0 0 0-2.5 2.5V6a2.5 2.5 0 0 0-2 4 2.5 2.5 0 0 0 0 4 2.5 2.5 0 0 0 2 4v.5A2.5 2.5 0 0 0 9.5 21c.83 0 1.5-.67 1.5-1.5V4.5c0-.83-.67-1.5-1.5-1.5z"></path><path d="M14.5 3a2.5 2.5 0 0 1 2.5 2.5V6a2.5 2.5 0 0 1 2 4 2.5 2.5 0 0 1 0 4 2.5 2.5 0 0 1-2 4v.5a2.5 2.5 0 0 1-2.5 2.5c-.83 0-1.5-.67-1.5-1.5V4.5c0-.83.67-1.5 1.5-1.5z"></path></svg></span><h3 class="card-title">A mind</h3><span class="card-label">colleague-like</span><ul class="attrs"><li>High capability</li><li>Persistent memory</li><li>Stable identity</li><li>Growing heuristics</li></ul></article>
+      <article class="card aspire"><span class="card-idx">04</span><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path></svg></span><h3 class="card-title">Human mind</h3><span class="card-label">aspiration</span><ul class="attrs"><li>Variable capability</li><li>Lifelong, selective</li><li>Deep, stable</li><li>Continuous learning</li></ul></article>
+    </div>
+    <p class="caption">A mind is one markdown-based construct: <span class="k">identity</span> + <span class="k">memory</span> + <span class="k">heuristics</span>. <strong>Claude Code is the substrate. Markdown is the storage.</strong> No vector DB, no fine-tuning.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="panel" style="margin-top:40px;">
+    <div class="panel-head"><span class="panel-tag">Panel B · Memory</span><h2 class="panel-title">Four tiers, by lifespan.</h2></div>
+    <p class="panel-sub">Organised by how long things live, not by topic. Index pattern keeps always-loaded context to ~1–2 KB while making thousands of memories available on demand.</p>
+    <div class="tiers-grid">
+      <div class="subpanel">
+        <div class="subpanel-head"><h3 class="subpanel-title">B1 · The 4-tier stack</h3><span class="subpanel-key">top = longer-lived</span></div>
+        <div class="tiers">
+          <div class="tier t1"><span class="tier-num">01</span><div class="tier-body"><div class="tier-name">Identity</div><div class="tier-meta">Personality. Rules it never breaks.</div><div class="tier-file">identity/anchor.md</div></div><span class="tier-life">read-only</span></div>
+          <div class="tier t2"><span class="tier-num">02</span><div class="tier-body"><div class="tier-name">Long-term memory</div><div class="tier-meta">Confirmed patterns, profile, lessons.</div><div class="tier-file">memory/MEMORY.md · {topic}.md</div></div><span class="tier-life">weeks+</span></div>
+          <div class="tier t3"><span class="tier-num">03</span><div class="tier-body"><div class="tier-name">Working memory</div><div class="tier-meta">This week — focus, blockers, recent corrections.</div><div class="tier-file">memory/working-memory.md</div></div><span class="tier-life">days</span></div>
+          <div class="tier t4"><span class="tier-num">04</span><div class="tier-body"><div class="tier-name">Archive</div><div class="tier-meta">Compressed history. Not loaded by default.</div><div class="tier-file">memory/archive.md</div></div><span class="tier-life">rarely read</span></div>
+        </div>
+      </div>
+      <div class="subpanel">
+        <div class="subpanel-head"><h3 class="subpanel-title">B2 · Hunch → heuristic</h3><span class="subpanel-key">3-confirmation rule</span></div>
+        <ol class="promo-list">
+          <li class="promo-step"><span class="promo-num">1×</span><div class="promo-body"><span class="promo-label">Observation <span class="pill observation">logged</span></span><span class="promo-desc">Noted by collector. Not yet in memory.</span></div></li>
+          <li class="promo-step"><span class="promo-num">2×</span><div class="promo-body"><span class="promo-label">Hunch <span class="pill hunch">tentative</span></span><span class="promo-desc">Added to working-memory, labelled.</span></div></li>
+          <li class="promo-step"><span class="promo-num">3×</span><div class="promo-body"><span class="promo-label">Heuristic <span class="pill heuristic">permanent</span></span><span class="promo-desc">Promoted to Tier 2. Applied going forward.</span></div></li>
+          <li class="promo-step"><span class="promo-num">↺</span><div class="promo-body"><span class="promo-label">Contradicted <span class="pill demote">demoted</span></span><span class="promo-desc">Returns to hunch, or archived with note.</span></div></li>
+        </ol>
+        <p style="font-size:12px;color:var(--text-2);line-height:1.5;margin:0;padding-top:10px;border-top:1px dashed var(--border);">Each Tier-2 entry stores <b style="color:var(--text);font-weight:600">why</b> + <b style="color:var(--text);font-weight:600">how to apply</b> — so the mind can judge edge cases instead of blindly following.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="panel" style="margin-top:40px;">
+    <div class="panel-head"><span class="panel-tag">Panel C · Self-maintenance</span><h2 class="panel-title">Three concentric loops.</h2></div>
+    <p class="panel-sub">The mind curates itself <strong style="color:var(--text)">while you work</strong>, not just at logoff. Catching corrections within minutes produces tighter rules than catching them hours later.</p>
+    <div class="loops">
+      <article class="loop inner">
+        <div class="loop-head"><span class="loop-kicker">Inner loop</span><h3 class="loop-title">Mid-session — every N tool calls</h3><span class="loop-cadence">PostToolUse hook</span></div>
+        <div class="loop-body">
+          <div class="step"><div class="step-head"><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><span class="step-name">Collect signals</span><span class="step-hook">memory-collector.py</span></div><div class="step-desc">Every <b>~10 calls</b>: scans live transcript, appends to <code style="font-family:var(--mono);font-size:11px;background:var(--mute-soft);padding:1px 4px;border-radius:3px;">working-memory.md</code> while context is hot.</div><div class="signals"><span class="sig c"><span class="dot"></span>correction</span><span class="sig o"><span class="dot"></span>confirmation</span><span class="sig f"><span class="dot"></span>follow-through</span><span class="sig r"><span class="dot"></span>frustration</span></div></div>
+          <div class="loop-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg></div>
+          <div class="step"><div class="step-head"><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h13"></path><path d="M3 12h9"></path><path d="M3 18h13"></path><path d="M18 9l3 3-3 3"></path></svg></span><span class="step-name">Promote / demote</span><span class="step-hook">memory-curator.py</span></div><div class="step-desc">Every <b>~25 calls</b>: applies the 3-confirmation rule. Hunch → heuristic. Contradicted → demoted. Stale (&gt;5d) → archived.</div></div>
+        </div>
+      </article>
+      <article class="loop middle">
+        <div class="loop-head"><span class="loop-kicker">Middle loop</span><h3 class="loop-title">Per session — bookends</h3><span class="loop-cadence">SessionStart · SessionEnd</span></div>
+        <div class="loop-body">
+          <div class="step"><div class="step-head"><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M10 8l6 4-6 4V8z"></path></svg></span><span class="step-name">Session start</span><span class="step-hook">session-start-health.py</span></div><div class="step-desc">Loads <b>identity</b> + <b>MEMORY.md</b> + <b>working-memory</b>. Warns if curator hasn't run in &gt;7 days.</div></div>
+          <div class="loop-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg></div>
+          <div class="step"><div class="step-head"><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 14l4-4 3 3 5-6"></path></svg></span><span class="step-name">Session end</span><span class="step-hook">session-metrics.py</span></div><div class="step-desc">Writes one row to <code style="font-family:var(--mono);font-size:11px;background:var(--mute-soft);padding:1px 4px;border-radius:3px;">session-metrics.csv</code>. Heavy maintenance already happened in the inner loop — this is the safety net.</div></div>
+        </div>
+      </article>
+      <article class="loop outer">
+        <div class="loop-head"><span class="loop-kicker">Outer loop</span><h3 class="loop-title">Weekly — time-gated</h3><span class="loop-cadence">7-day timestamp</span></div>
+        <div class="loop-body">
+          <div class="step"><div class="step-head"><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><rect x="7" y="11" width="3" height="7"></rect><rect x="12" y="7" width="3" height="11"></rect><rect x="17" y="14" width="3" height="4"></rect></svg></span><span class="step-name">Compute hypotheses</span><span class="step-hook">metrics-brain.py</span></div><div class="step-desc">Reads CSV, computes <b>H1–H5</b>, writes <code style="font-family:var(--mono);font-size:11px;background:var(--mute-soft);padding:1px 4px;border-radius:3px;">daily-report.md</code>. Measurement keeps the system honest.</div></div>
+          <div class="loop-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg></div>
+          <div class="step"><div class="step-head"><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h10"></path><circle cx="19" cy="18" r="2"></circle></svg></span><span class="step-name">Regenerate index</span><span class="step-hook">memory-index-weekly.py</span></div><div class="step-desc">Optional. Rebuilds <code style="font-family:var(--mono);font-size:11px;background:var(--mute-soft);padding:1px 4px;border-radius:3px;">memory/INDEX.md</code> grouped by rules + decisions.</div></div>
+        </div>
+      </article>
+    </div>
+    <p class="caption" style="margin-top:24px;">Why nest them? <strong>By the time a session ends, the model has drifted from the moment of insight.</strong> The inner loop catches corrections within minutes; bookends and weekly review are safety nets and measurement.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="panel" style="margin-top:40px;">
+    <div class="panel-head"><span class="panel-tag">Panel D · Findings</span><h2 class="panel-title">Does it actually help?</h2></div>
+    <p class="panel-sub">9,869 sessions over 3 months. Matched cohort: <strong style="color:var(--text)">71 with memory</strong> vs <strong style="color:var(--text)">21 without</strong> (≥30 tool calls, post-instrumentation).</p>
+    <div class="findings">
+      <div class="findings-grid">
+        <div class="stat win"><span class="stat-h">H1</span><span class="stat-name">Production ratio</span><div class="stat-row"><span class="stat-big">18.5%</span><span class="stat-vs">vs 8.5%</span></div><span class="stat-tag">Win — 2.2×</span></div>
+        <div class="stat win"><span class="stat-h">H2</span><span class="stat-name">Calls before first edit</span><div class="stat-row"><span class="stat-big">14.6</span><span class="stat-vs">vs 16.3</span></div><span class="stat-tag">Win — faster orient</span></div>
+        <div class="stat win"><span class="stat-h">H4</span><span class="stat-name">Productive calls / session</span><div class="stat-row"><span class="stat-big">26.0</span><span class="stat-vs">vs 6.0</span></div><span class="stat-tag">Win — 4.3×</span></div>
+        <div class="stat null"><span class="stat-h">H5</span><span class="stat-name">Repeat-correction rate</span><div class="stat-row"><span class="stat-big">19.7%</span><span class="stat-vs">vs 14.3%</span></div><span class="stat-tag">Null — primary outcome</span></div>
+      </div>
+      <p class="findings-foot"><b>Memory-loaded sessions are denser and orient faster.</b> But H5 — the headline outcome (fewer repeated corrections) — came back null. We don't have a clean A/B yet. Publishing specifically to get more data and pushback on experimental design.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Pattern inspired by Karpathy's "LLM wiki" idea.</span>
+    <span>CoMindLab Labs · MindMemory · research preview · MIT</span>
+  </footer>
+</main>
+</body></html>

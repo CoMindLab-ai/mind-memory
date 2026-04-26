@@ -1,4 +1,4 @@
-# CognitiveMemory Starter Kit
+# MindMemory Starter Kit
 
 The drop-in memory layer for [Claude Code](https://claude.com/claude-code).
 
@@ -10,7 +10,7 @@ The drop-in memory layer for [Claude Code](https://claude.com/claude-code).
     session-metrics.py       Captures session data on SessionEnd
     metrics-brain.py         Weekly analyser — writes daily-report.md
   skills/
-    cognitive-memory-setup.md  Interactive setup wizard
+    mind-memory-setup.md  Interactive setup wizard
   settings.json.example      Hook wiring (rename or merge into yours)
 memory/
   MEMORY.md                  Long-term memory index
@@ -28,7 +28,7 @@ cp -r starter-kit/. your-project/
 cd your-project
 mv .claude/settings.json.example .claude/settings.json
 claude
-> /cognitive-memory-setup
+> /mind-memory-setup
 ```
 
 Two commands + the wizard. Under 5 minutes.
@@ -41,7 +41,7 @@ Copy everything from the starter kit except `settings.json.example`:
 
 ```bash
 cp starter-kit/.claude/hooks/*.py your-project/.claude/hooks/
-cp starter-kit/.claude/skills/cognitive-memory-setup.md your-project/.claude/skills/
+cp starter-kit/.claude/skills/mind-memory-setup.md your-project/.claude/skills/
 cp -r starter-kit/memory your-project/memory
 ```
 
@@ -54,7 +54,7 @@ Read memory/MEMORY.md for preferences, project lessons, and heuristics.
 Read memory/working-memory.md for this week's context.
 ```
 
-Then run `claude` and invoke `/cognitive-memory-setup`.
+Then run `claude` and invoke `/mind-memory-setup`.
 
 ## Smoke test (30 seconds)
 
@@ -107,7 +107,7 @@ If you already have `hooks.SessionEnd`, append the session-metrics entry to the 
 
 ## What the wizard does
 
-`/cognitive-memory-setup` walks you through three stages before the questions:
+`/mind-memory-setup` walks you through three stages before the questions:
 
 **Step 0 — Scope.** First question, always: where should this install?
 
@@ -115,14 +115,14 @@ If you already have `hooks.SessionEnd`, append the session-metrics entry to the 
 2. **Global / personal** — `~/.claude/`. One memory layer that follows you across every project.
 3. **Auto-split (recommended)** — personal preferences (e.g. `user_profile.md`) go global; identity, working-memory, and project lessons go local. Best of both — answer once globally, minimal per-project setup.
 
-**Step 0b — Safety check + archive** (only if you have existing CognitiveMemory files at the chosen scope). Choices:
+**Step 0b — Safety check + archive** (only if you have existing MindMemory files at the chosen scope). Choices:
 
-- **Archive then overwrite** (recommended) — copies all existing files into `<scope>/.cognitive-memory-archive/{YYYY-MM-DD-HHMM}/` before writing fresh ones. One archive folder per wizard run, easy to find and restore.
+- **Archive then overwrite** (recommended) — copies all existing files into `<scope>/.mind-memory-archive/{YYYY-MM-DD-HHMM}/` before writing fresh ones. One archive folder per wizard run, easy to find and restore.
 - **Overwrite without archive** — destructive, no recovery.
 - **Skip existing** — only writes files that don't already exist.
 - **Cancel** — exits, changes nothing.
 
-**`CLAUDE.md` is never overwritten.** If it exists, the wizard appends or updates a clearly marked `<!-- CognitiveMemory: BEGIN -->...<!-- CognitiveMemory: END -->` block. Idempotent — re-running the wizard updates the block in place, never duplicates it. Everything else in your `CLAUDE.md` stays untouched.
+**`CLAUDE.md` is never overwritten.** If it exists, the wizard appends or updates a clearly marked `<!-- MindMemory: BEGIN -->...<!-- MindMemory: END -->` block. Idempotent — re-running the wizard updates the block in place, never duplicates it. Everything else in your `CLAUDE.md` stays untouched.
 
 **Quick path (default, ~5 min)** — seven questions via `AskUserQuestion`:
 
@@ -181,7 +181,7 @@ Read [../03-findings.md](../03-findings.md) for what the data looked like in our
 | ------------------------------------ | --------------------- | -------------------------------------------------------------------------------- |
 | Hook doesn't fire                    | SessionEnd not wired  | Check `.claude/settings.json` has the hook block                                 |
 | CSV has blank columns                | Old transcript format | Newer transcripts populate correctly — just keep using                           |
-| `/cognitive-memory-setup` not found  | Skill not loaded      | Make sure `.claude/skills/cognitive-memory-setup.md` exists; restart `claude`    |
+| `/mind-memory-setup` not found       | Skill not loaded      | Make sure `.claude/skills/mind-memory-setup.md` exists; restart `claude`         |
 | Report says "not enough data"        | < 2 weeks of sessions | Keep using. Report needs ≥30 sessions/week for stable signal                     |
 | `python: command not found`          | Python 3 not on PATH  | Replace `python` with `python3` in `settings.json`                               |
 
@@ -195,7 +195,7 @@ Read [../03-findings.md](../03-findings.md) for what the data looked like in our
 
 - You don't use Claude Code (this is CC-specific, not LLM-generic)
 - You need enterprise audit trails for memory changes (this is markdown on disk)
-- You want something with a UI — CognitiveMemory is files and CLI
+- You want something with a UI — MindMemory is files and CLI
 
 ## Contributing
 
@@ -203,4 +203,4 @@ See [../CONTRIBUTING.md](../CONTRIBUTING.md) and [../04-open-questions.md](../04
 
 ---
 
-*CognitiveMemory starter kit v0.1 — MIT — CoMindLab Labs*
+*MindMemory starter kit v0.1 — MIT — CoMindLab Labs*

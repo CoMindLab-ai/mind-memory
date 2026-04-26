@@ -25,7 +25,7 @@ Trust            Transactional                Transactional                 Rela
 
 The industry has focused on the left columns. Better tools, better agents, better single-call performance. Memory has been an afterthought — a vector DB bolted on, or a buffer that expires.
 
-**CognitiveMemory** sits between OpenClaude and a human mind. It's the next evolution: **AI that remembers like a colleague**.
+**MindMemory** sits between OpenClaude and a human mind. It's the next evolution: **AI that remembers like a colleague**.
 
 ## What a "mind" actually is
 
@@ -46,7 +46,7 @@ A mind is **one markdown-based construct** wrapping all three. You can make a "d
 
 Andrej Karpathy's [LLM Wiki framing](https://x.com/karpathy/status/2039805659525644595) ([also in this gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)) is the kernel here. The idea: an agent that writes down what worked and what didn't, in structured natural language, then reads those notes back at the start of the next session. Not fine-tuning. Not vector search on every token. Just a curated, ever-improving wiki that the agent itself maintains.
 
-CognitiveMemory implements that loop with **three concentric maintenance cycles**, not just session bookends. Self-maintenance is continuous — the system curates itself while you work, not only when you log off.
+MindMemory implements that loop with **three concentric maintenance cycles**, not just session bookends. Self-maintenance is continuous — the system curates itself while you work, not only when you log off.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -98,7 +98,7 @@ The tradeoff: markdown doesn't scale to millions of entries. That's fine. Human 
 
 ## What we're publishing
 
-This research folder is the **generic, portable kernel** of the CognitiveMemory idea. Not a framework. Not a SaaS. A small set of files you can drop into any Claude Code project plus a setup wizard that personalises them to you.
+This research folder is the **generic, portable kernel** of the MindMemory idea. Not a framework. Not a SaaS. A small set of files you can drop into any Claude Code project plus a setup wizard that personalises them to you.
 
 If the kernel works — if people adopt it, extend it, disagree with us — the bigger system (multiple minds, daemons, auto-consolidation) can follow. Start small, prove the idea, let the community take it further than we can.
 
@@ -114,4 +114,4 @@ The honest answer to "is it working?" is *partially, and we have the numbers to 
 
 ---
 
-*CoMindLab Labs — CognitiveMemory research, 2026.*
+*CoMindLab Labs — MindMemory research, 2026.*

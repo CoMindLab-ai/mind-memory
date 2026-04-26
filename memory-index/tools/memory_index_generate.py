@@ -1,4 +1,4 @@
-"""CognitiveMemory — Memory Index Generator.
+"""MindMemory — Memory Index Generator.
 
 Reads structured memory sources (rules + decisions) and writes a single flat
 INDEX.md grouped by source type. No LLM, no external deps. Re-run safe — the
@@ -160,7 +160,7 @@ def build_index(rules: list[dict], decisions: list[dict]) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="CognitiveMemory index generator")
+    parser = argparse.ArgumentParser(description="MindMemory index generator")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG_PATH)
     parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
     parser.add_argument("--dry-run", action="store_true",

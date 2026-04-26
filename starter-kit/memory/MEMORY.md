@@ -34,6 +34,6 @@ in the linked files.
 
 ---
 
-*Memory grows as you use Claude Code. Run `/cognitive-memory-setup` to seed with initial
+*Memory grows as you use Claude Code. Run `/mind-memory-setup` to seed with initial
 entries, or edit this file by hand. Every entry should point to a file with
 the detail.*

@@ -2,7 +2,7 @@
 
 ## Four tiers, by lifespan
 
-Memory in CognitiveMemory is organised by how long things should live, not by what topic they cover.
+Memory in MindMemory is organised by how long things should live, not by what topic they cover.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -95,13 +95,13 @@ The session bookend is for measurement and load/save, not for the heavy maintena
 
 ### Manual override
 
-If you want to force a full consolidation (e.g. after a major project change), the `/cognitive-memory-setup` skill can re-seed identity + memory from a fresh conversation, and a `/document` skill (if installed) runs an explicit end-to-end consolidation pass. The hooks remain the primary mechanism — these are the manual escape hatches.
+If you want to force a full consolidation (e.g. after a major project change), the `/mind-memory-setup` skill can re-seed identity + memory from a fresh conversation, and a `/document` skill (if installed) runs an explicit end-to-end consolidation pass. The hooks remain the primary mechanism — these are the manual escape hatches.
 
 ## The "hunch → heuristic" promotion rule
 
 Not every correction becomes a permanent rule. That would lead to memory pollution and contradictions.
 
-CognitiveMemory uses a 3-confirmation rule borrowed from scientific reasoning:
+MindMemory uses a 3-confirmation rule borrowed from scientific reasoning:
 
 ```
 1st occurrence    → log as observation (not in memory yet)
@@ -158,7 +158,7 @@ patch the DB layer.
 
 Each file has frontmatter (name, type, description) and a body with the rule plus **why** and **how to apply**. The "why" is the most important field — it lets the mind judge edge cases instead of blindly following.
 
-## What CognitiveMemory is NOT
+## What MindMemory is NOT
 
 - **Not a vector database.** No embeddings, no similarity search. Plain markdown, loaded directly.
 - **Not fine-tuning.** The model doesn't change. Only the context does.
@@ -175,7 +175,7 @@ A [CLAUDE.md](https://docs.claude.com/en/docs/claude-code/memory) file is great 
 - Archive stale content — it just keeps growing until it's too big to be useful
 - Measure its own effectiveness — no feedback loop
 
-CognitiveMemory adds all four. It's CLAUDE.md with a growth model.
+MindMemory adds all four. It's CLAUDE.md with a growth model.
 
 ## Implementation footprint
 
@@ -191,7 +191,7 @@ The whole system, in files:
     session-start-health.py    (~50 lines, stale-consolidation warning)
     memory-index-weekly.py     (optional, ~50 lines, weekly index gate)
   skills/
-    cognitive-memory-setup.md  (the wizard, ~200 lines)
+    mind-memory-setup.md       (the wizard, ~200 lines)
     memory-index.md            (optional, indexing feature wizard)
   settings.json                (~50 lines, hook wiring)
 memory/
@@ -209,7 +209,7 @@ Total added weight: ~2MB of markdown for a year of active use. Negligible next t
 
 ## Optional feature: Memory Index
 
-CognitiveMemory ships with an optional **memory-index** feature in a separate drop-in folder (`memory-index/` in the research repo). It's a regenerable, navigable overview of your structured memory — distinct from `memory/MEMORY.md`, which is the curated long-term *index of memories you have written*. The memory-index is *machine-generated* and answers a different question:
+MindMemory ships with an optional **memory-index** feature in a separate drop-in folder (`memory-index/` in the research repo). It's a regenerable, navigable overview of your structured memory — distinct from `memory/MEMORY.md`, which is the curated long-term *index of memories you have written*. The memory-index is *machine-generated* and answers a different question:
 
 | File | Hand-curated? | Source | Question it answers |
 |------|---------------|--------|---------------------|
@@ -228,4 +228,4 @@ The architecture above is the mechanism. The next question is: **does it actuall
 
 ---
 
-*CoMindLab Labs — CognitiveMemory research, 2026.*
+*CoMindLab Labs — MindMemory research, 2026.*

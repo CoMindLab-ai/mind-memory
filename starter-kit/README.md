@@ -107,9 +107,22 @@ If you already have `hooks.SessionEnd`, append the session-metrics entry to the 
 
 ## What the wizard does
 
-`/cognitive-memory-setup` walks you through two stages:
+`/cognitive-memory-setup` walks you through three stages before the questions:
 
-**Step 0 — Safety check** (only if you have existing CognitiveMemory files). The wizard scans `.claude/identity/` and `memory/` and asks how to handle anything it finds: **Overwrite**, **Backup then overwrite** (renames to `<name>.bak-{timestamp}`, recommended), **Skip existing**, or **Cancel**. Whatever you pick is honoured for every file.
+**Step 0 — Scope.** First question, always: where should this install?
+
+1. **This project only** — `./.claude/` and `./memory/`. Project-specific memory. Re-run for every new project.
+2. **Global / personal** — `~/.claude/`. One memory layer that follows you across every project.
+3. **Auto-split (recommended)** — personal preferences (e.g. `user_profile.md`) go global; identity, working-memory, and project lessons go local. Best of both — answer once globally, minimal per-project setup.
+
+**Step 0b — Safety check + archive** (only if you have existing CognitiveMemory files at the chosen scope). Choices:
+
+- **Archive then overwrite** (recommended) — copies all existing files into `<scope>/.cognitive-memory-archive/{YYYY-MM-DD-HHMM}/` before writing fresh ones. One archive folder per wizard run, easy to find and restore.
+- **Overwrite without archive** — destructive, no recovery.
+- **Skip existing** — only writes files that don't already exist.
+- **Cancel** — exits, changes nothing.
+
+**`CLAUDE.md` is never overwritten.** If it exists, the wizard appends or updates a clearly marked `<!-- CognitiveMemory: BEGIN -->...<!-- CognitiveMemory: END -->` block. Idempotent — re-running the wizard updates the block in place, never duplicates it. Everything else in your `CLAUDE.md` stays untouched.
 
 **Quick path (default, ~5 min)** — seven questions via `AskUserQuestion`:
 

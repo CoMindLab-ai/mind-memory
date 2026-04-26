@@ -1,6 +1,6 @@
 ---
 name: cognitive-memory-setup
-description: Interactive wizard that sets up a CognitiveMemory mind — identity, memory files, working memory, and user profile (accommodations). Has two paths — quick (7 questions, ~5 min) or deep-dive (extra conversation after question 3, ~15-20 min). Always runs a safety check first to never overwrite existing files without consent. Use when the user runs /cognitive-memory-setup, says "set up a mind", "initialise memory", or starts with a fresh CognitiveMemory starter kit.
+description: Interactive wizard that sets up a CognitiveMemory mind — identity, memory files, working memory, and user profile. First asks the scope (project / global / auto-split). Has two paths — quick (7 questions, ~5 min) or deep-dive (extra conversation after question 3, ~15-20 min). Archives existing files before any overwrite, never destructively modifies CLAUDE.md (uses a managed marker block instead). Use when the user runs /cognitive-memory-setup, says "set up a mind", "initialise memory", or starts with a fresh CognitiveMemory starter kit.
 ---
 
 # CognitiveMemory Setup Wizard
@@ -9,33 +9,92 @@ You are walking a user through setting up a mind. Default path is brisk
 (~5 minutes). After question 3 you offer an optional deep-dive that
 produces a richer personality (~15-20 minutes total).
 
-## Step 0 — Safety check (BEFORE any questions)
+## Step 0 — Scope question (BEFORE any other questions)
 
-Before asking anything, scan for existing files in the user's project:
+Ask the user where this CognitiveMemory installation should live, via
+`AskUserQuestion`:
 
-- `.claude/identity/anchor.md`
-- `memory/MEMORY.md`
-- `memory/working-memory.md`
-- `memory/user_profile.md`
-- any `memory/feedback_*.md`
-
-**If ANY of these exist**, surface them upfront via `AskUserQuestion`:
-
-> "I found existing CognitiveMemory files in this project. What should I
-> do with them?"
+> "Where should CognitiveMemory live?
 >
-> 1. **Overwrite** — replace existing files with new ones from the wizard
-> 2. **Backup then overwrite** — rename existing to `<name>.bak-{YYYY-MM-DD-HHMM}`, then write fresh files (recommended)
+> 1. **This project only** — installs to `./.claude/` and `./memory/` in this folder. Memory is project-specific. Re-run the wizard for every new project.
+> 2. **Global / personal** — installs to `~/.claude/` (your user-level Claude Code config). One memory layer that follows you across every project. Project-specific lessons land here too.
+> 3. **Auto-split (recommended)** — personal preferences (user_profile.md, working style) go to `~/.claude/memory/`; project-specific identity, working-memory, and feedback files go to `./memory/`. You answer the wizard once globally, plus minimal per-project setup."
+
+Remember the chosen scope. Apply it to every file write later. Defaults:
+
+- **Project-only** writes everything under `./` (current directory)
+- **Global** writes everything under `~/.claude/`
+- **Auto-split** writes per-table below:
+
+| File                       | Auto-split target                                 |
+| -------------------------- | ------------------------------------------------- |
+| `identity/anchor.md`       | `./.claude/` (mind is project-specific)           |
+| `memory/MEMORY.md`         | `./memory/` (project's own index)                 |
+| `memory/working-memory.md` | `./memory/` (this week, this project)             |
+| `memory/feedback_*.md`     | `./memory/` (project lessons)                     |
+| `memory/user_profile.md`   | `~/.claude/memory/` (you, not this project)       |
+| `CLAUDE.md` block          | `./CLAUDE.md` (project-scoped loader)             |
+
+## Step 0b — Safety check + archive
+
+After scope is chosen, scan target locations for existing files:
+
+- `<scope>/.claude/identity/anchor.md`
+- `<scope>/memory/MEMORY.md`
+- `<scope>/memory/working-memory.md`
+- `<scope>/memory/user_profile.md`
+- any `<scope>/memory/feedback_*.md`
+- `<scope>/CLAUDE.md` (special handling — see below)
+
+For Auto-split, scan BOTH `./` and `~/.claude/` per the table above.
+
+**If ANY of these exist (other than CLAUDE.md)**, surface them upfront via `AskUserQuestion`:
+
+> "I found existing CognitiveMemory files. What should I do with them?
+>
+> 1. **Archive then overwrite** (recommended) — copy ALL existing files into a single archive folder, then write fresh files
+> 2. **Overwrite without archive** — replace files directly (destructive, no recovery)
 > 3. **Skip existing** — only write files that don't already exist
-> 4. **Cancel** — exit the wizard, don't change anything
+> 4. **Cancel** — exit the wizard, don't change anything"
 
-Whatever the user picks, **honour it for every file** you would write
-later. If they pick "Backup", you must rename each existing file to
-`<original>.bak-2026-04-26-1430` (use the actual current time) BEFORE
-overwriting. If they pick "Skip", silently skip any file that already
-exists when you reach the write step. If they pick "Cancel", stop here.
+### Archive mechanism
 
-If NO existing files were found, proceed straight to question 1.
+If the user picks **Archive then overwrite**:
+
+1. Compute archive directory: `<scope>/.cognitive-memory-archive/{YYYY-MM-DD-HHMM}/` (use actual current time)
+2. Create the directory
+3. For every file the wizard would write, if it already exists at the target path, **copy** (not move — preserve original until success) the original into the archive directory, preserving the relative path inside the archive (e.g. `memory/MEMORY.md` → `<archive>/memory/MEMORY.md`)
+4. After ALL copies succeed, proceed with overwriting the originals
+5. After ALL writes succeed, tell the user the archive path so they can restore manually if needed
+
+For Auto-split scope, create one archive directory per scope location (one under `./` for project files, one under `~/.claude/` for global files) — each labelled with the same timestamp so the user can correlate them.
+
+If the user picks **Overwrite without archive**: write directly with no backup. Warn the user this is destructive.
+
+If the user picks **Skip existing**: silently skip files that already exist when you reach the write step; report which ones at wrap-up.
+
+If the user picks **Cancel**: stop here, change nothing.
+
+### CLAUDE.md special handling — never destructive
+
+`CLAUDE.md` carries the user's own project conventions. **The wizard NEVER overwrites it.** Instead:
+
+- If `CLAUDE.md` does not exist at the scope target, write a fresh one from the template
+- If `CLAUDE.md` exists, find the marker block:
+
+  ```markdown
+  <!-- CognitiveMemory: BEGIN (do not edit by hand — managed by /cognitive-memory-setup) -->
+  ...managed content...
+  <!-- CognitiveMemory: END -->
+  ```
+
+  - If the marker block exists: replace its contents in place (idempotent — re-running the wizard updates the block, never duplicates it)
+  - If the marker block does NOT exist: append a NEW block to the end of the file, separated by a blank line. Tell the user where you appended it
+- Never modify any text outside the marker block. The user owns everything else in their `CLAUDE.md`
+
+If the user picked Archive: also copy the existing `CLAUDE.md` into the archive directory before modifying it (even though the modification is non-destructive, archiving the original gives a clean restore point).
+
+If NO existing files were found at any target, skip the safety prompt entirely and proceed to question 1.
 
 ## Your job
 
@@ -158,17 +217,25 @@ Write up to five files (depends on answers — `user_profile.md` only if
 question 7 had selections). Use the current working directory's `.claude/`
 and `memory/` folders (create them if missing).
 
-**If the user picked "Backup then overwrite" in Step 0**, rename each
-existing target file to `<filename>.bak-{YYYY-MM-DD-HHMM}` BEFORE
-writing the new version (use the current time, e.g. `anchor.md.bak-2026-04-26-1430`).
+**If the user picked "Archive then overwrite" in Step 0b**, the archive
+step has already happened (per the Archive mechanism above). Just write
+the new files at the target paths.
 
 **If the user picked "Skip existing"**, check each file's path before
 writing — if it exists, skip it silently and tell the user at the wrap-up
 which files were skipped.
 
-**If the user picked "Overwrite"**, write directly without backup.
+**If the user picked "Overwrite without archive"**, write directly with
+no archive. The destructive nature of this should already have been
+communicated.
 
 **If the user picked "Cancel"**, you should not be at this step.
+
+**Use the scope chosen in Step 0** to resolve every path:
+
+- Project-only: write under `./`
+- Global: write under `~/.claude/`
+- Auto-split: per the table in Step 0
 
 ### 1. `.claude/identity/anchor.md`
 
@@ -286,14 +353,16 @@ into MEMORY.md or archive.md during consolidation.*
 
 Tell the user:
 
-1. What files you wrote (and which were skipped or backed up, if relevant)
-2. That the mind is ready — they can exit this session and start a new one;
+1. What scope was used (project / global / auto-split) and where files were written
+2. The archive directory path (if archive mode was used) and that they can restore from it
+3. Which files were skipped (if skip mode was used)
+4. That the mind is ready — they can exit this session and start a new one;
    the mind will load automatically from `CLAUDE.md` → `identity/anchor.md`
-   → `memory/MEMORY.md`
-3. That after 2 weeks of use, `python .claude/hooks/metrics-brain.py` will
+   → `memory/MEMORY.md` (plus global `~/.claude/memory/user_profile.md` if auto-split or global)
+5. That after 2 weeks of use, `python .claude/hooks/metrics-brain.py` will
    tell them whether memory is measurably helping
 
-Keep the wrap-up under 10 lines. Don't list the entire file tree.
+Keep the wrap-up under 12 lines. Don't list the entire file tree.
 
 ## Rules for you as the wizard
 
@@ -302,8 +371,10 @@ Keep the wrap-up under 10 lines. Don't list the entire file tree.
 - **Respect the user's answers.** Don't rewrite their hard rules to be
   "better". Their rules, their mind.
 - **Don't ship emojis** unless the user explicitly says they want them.
-- **Existing files trigger Step 0.** Never write over them without going
-  through the safety prompt first.
+- **Existing files trigger Step 0b.** Never write over them without going
+  through the safety prompt first. Default to "Archive then overwrite".
+- **CLAUDE.md is sacred.** Never overwrite it. Append or replace the
+  managed marker block only.
 - **If any answer is vague** ("I don't know"), offer 2-3 sensible defaults
   and let them pick.
 - **In deep-dive mode, listen don't lecture.** One question, one short

@@ -6,6 +6,10 @@
 
 A drop-in folder + a small set of Python hooks that make Claude Code remember your corrections, preferences, and project lessons across sessions. The hooks run continuously — collecting signals mid-session, promoting confirmed patterns to rules, measuring whether memory is helping you. Markdown-native. MIT. Installs in 5 minutes.
 
+![MindMemory architecture — 4 panels covering concept, memory tiers, self-maintenance loops, and findings](MindMemory.png)
+
+*Single-page architecture reference. Open [`MindMemory.html`](MindMemory.html) for the interactive version, or download a PDF: [visual model](MindMemory.pdf) · [corporate brief](MindMemory-corporate.pdf) · [technical brief](MindMemory-technical.pdf).*
+
 ## The headline number
 
 Across 9,869 real Claude Code sessions over 3 months — comparing the 92 that are directly comparable (≥30 tool calls, post-instrumentation):

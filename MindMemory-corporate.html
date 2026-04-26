@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Memory at Work — A CoMindLab Position Paper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAF7F2;
+    --panel: #FFFFFF;
+    --text: #0E1B2C;
+    --text-2: #5B6675;
+    --border: #E8E2D6;
+    --teal: #C84A35;
+    --teal-soft: #FBEAE4;
+    --slate: #1F3A5F;
+    --slate-soft: #E5EAF1;
+    --amber: #B8862A;
+    --amber-soft: #F8EFD8;
+    --mute: #9A9385;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: "ss02";
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 11pt;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 28px; }
+  .cover {
+    border-bottom: 2px solid var(--teal);
+    padding-bottom: 18px;
+    margin-bottom: 24px;
+  }
+  .wordmark { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px 4px 8px; border: 1px solid var(--border); border-radius: 6px; font-weight: 600; font-size: 11pt; }
+  .wordmark-dot { width: 12px; height: 12px; border-radius: 3px; background: var(--teal); position: relative; }
+  .wordmark-dot::after { content:""; position:absolute; inset:3px; border-radius:1px; background: var(--bg); }
+  .kicker { font-family: var(--mono); font-size: 9pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); margin-top: 18px; }
+  h1 { font-size: 26pt; font-weight: 600; letter-spacing: -0.02em; margin: 8px 0 6px; line-height: 1.1; }
+  .deck { color: var(--text-2); font-size: 13pt; max-width: 620px; margin: 0; }
+  .meta { font-size: 9.5pt; color: var(--text-2); margin-top: 14px; font-family: var(--mono); }
+  h2 { font-size: 16pt; font-weight: 600; letter-spacing: -0.01em; margin: 32px 0 10px; padding-top: 6px; border-top: 1px solid var(--border); padding-top: 14px; }
+  h2 .num { color: var(--teal); font-family: var(--mono); font-size: 11pt; margin-right: 8px; }
+  h3 { font-size: 12pt; font-weight: 600; margin: 22px 0 8px; }
+  p { margin: 0 0 10px; }
+  ul { margin: 0 0 12px; padding-left: 20px; }
+  li { margin: 4px 0; }
+  .pull {
+    background: var(--teal-soft);
+    border-left: 3px solid var(--teal);
+    padding: 14px 16px;
+    margin: 18px 0;
+    border-radius: 4px;
+    font-size: 11.5pt;
+    color: var(--text);
+  }
+  .pull strong { color: var(--teal); }
+  .quiet {
+    color: var(--text-2);
+    font-size: 10pt;
+    font-style: italic;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .box {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    background: var(--panel);
+  }
+  .box-head { font-family: var(--mono); font-size: 9pt; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-2); margin-bottom: 4px; }
+  .box-body { font-size: 10.5pt; color: var(--text); }
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+  .stat { border: 1px solid var(--border); border-radius: 6px; padding: 10px; background: var(--panel); }
+  .stat-label { font-family: var(--mono); font-size: 8.5pt; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-num { font-size: 18pt; font-weight: 600; color: var(--text); margin-top: 2px; line-height: 1.1; }
+  .stat-vs { font-family: var(--mono); font-size: 9pt; color: var(--text-2); }
+  .stat.win .stat-num { color: #3F7A52; }
+  .stat.null .stat-num { color: #B23A2E; }
+  .figure { margin: 18px 0; padding: 0; }
+  .figure img { width: 100%; border: 1px solid var(--border); border-radius: 6px; }
+  .figure-cap { font-size: 9pt; color: var(--text-2); margin-top: 6px; text-align: center; font-style: italic; }
+  .footer-bar { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 9pt; color: var(--text-2); display: flex; justify-content: space-between; gap: 12px; }
+  a { color: var(--slate); text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 2px; }
+  .page-break { page-break-before: always; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="cover">
+    <span class="wordmark"><span class="wordmark-dot"></span><span>MindMemory</span></span>
+    <div class="kicker">CoMindLab Position Paper · Corporate edition</div>
+    <h1>Memory at Work.</h1>
+    <p class="deck">Why the next productivity gain in knowledge work won't come from smarter AI. It will come from AI that <em>remembers you</em>.</p>
+    <div class="meta">CoMindLab Labs · April 2026 · Author: Igal Geron, co-founder</div>
+  </header>
+
+  <h2><span class="num">01</span>The unspoken cost of AI today</h2>
+
+  <p>Every senior leader your organisation employs has the same complaint about AI tools: <strong>"I have to keep telling it the same things."</strong></p>
+
+  <p>The marketing director re-explains brand voice every chat. The CFO re-pastes last quarter's structure into every analysis. The CHRO re-teaches what "high potential" means in your culture, every single time. The work is real. The AI is capable. The friction sits in between — in the absence of memory.</p>
+
+  <p>This isn't a prompt-engineering problem. It's a <strong>context-engineering</strong> problem. And it's the single biggest lever left for making AI tools feel less like a search box and more like a colleague.</p>
+
+  <div class="pull">
+    <strong>The thesis:</strong> AI capability has plateaued at "smart but forgetful." The next 10× isn't a better model. It's a structured, persistent memory that turns every correction into a permanent improvement.
+  </div>
+
+  <h2><span class="num">02</span>What "memory" actually means at work</h2>
+
+  <p>Most AI products that mention memory mean something narrow: chat history. The system remembers what you said earlier in <em>this</em> conversation. That's session state, not memory. Close the tab and it's gone.</p>
+
+  <p>Real memory has four properties of a competent colleague who has worked with you for two years:</p>
+
+  <div class="grid-2">
+    <div class="box">
+      <div class="box-head">Identity</div>
+      <div class="box-body">A stable sense of who they are and how they work — not re-set every Monday.</div>
+    </div>
+    <div class="box">
+      <div class="box-head">Long-term</div>
+      <div class="box-body">Confirmed lessons that persist for months. "We tried that in 2024, here's why it didn't work."</div>
+    </div>
+    <div class="box">
+      <div class="box-head">Working</div>
+      <div class="box-body">This week's focus, this month's priorities. Knows what you're in the middle of.</div>
+    </div>
+    <div class="box">
+      <div class="box-head">Archive</div>
+      <div class="box-body">Old context that's not loaded by default but retrievable when relevant.</div>
+    </div>
+  </div>
+
+  <p>This is how a strong analyst, EA, or trusted peer carries you across years of work. It's also what AI tools have been missing — and what we've now built for the case where the work itself is computational: software, analysis, content, decision support.</p>
+
+  <h2><span class="num">03</span>MindMemory — the visual model</h2>
+
+  <p>We built MindMemory as a research preview to test one question: <strong>can a structured memory layer make an off-the-shelf AI tool measurably more useful, week after week?</strong></p>
+
+  <p>The visual on the next page summarises the architecture. Four panels:</p>
+
+  <ul>
+    <li><strong>From agents to minds</strong> — the evolution from stateless tools to something that behaves like a colleague.</li>
+    <li><strong>Four tiers</strong> — how memory is organised by lifespan, with a promotion ladder from observation to permanent rule.</li>
+    <li><strong>Three concentric loops</strong> — how the system curates itself <em>continuously</em>, not just at the end of a session.</li>
+    <li><strong>Findings</strong> — three months of measured data, including one honest null result.</li>
+  </ul>
+
+  <div class="figure">
+    <img src="MindMemory.png" alt="MindMemory visual model — 4 panels covering concept, memory tiers, self-maintenance loops, and measured findings.">
+    <div class="figure-cap">Figure 1. The MindMemory architecture. Single-page reference of the system in production at CoMindLab.</div>
+  </div>
+
+  <h2><span class="num">04</span>What the data says — three months in</h2>
+
+  <p>We instrumented every session over a 12-week period. 9,869 sessions captured. After applying matching criteria (≥30 tool calls, post-instrumentation cutoff), 92 sessions form the comparable cohort: 71 with memory loaded vs 21 without.</p>
+
+  <div class="stat-row">
+    <div class="stat win">
+      <div class="stat-label">Production</div>
+      <div class="stat-num">2.2×</div>
+      <div class="stat-vs">18.5% vs 8.5%</div>
+    </div>
+    <div class="stat win">
+      <div class="stat-label">Orient</div>
+      <div class="stat-num">−10%</div>
+      <div class="stat-vs">14.6 vs 16.3 calls</div>
+    </div>
+    <div class="stat win">
+      <div class="stat-label">Density</div>
+      <div class="stat-num">4.3×</div>
+      <div class="stat-vs">26.0 vs 6.0 edits</div>
+    </div>
+    <div class="stat null">
+      <div class="stat-label">Repeat</div>
+      <div class="stat-num">Null</div>
+      <div class="stat-vs">primary outcome</div>
+    </div>
+  </div>
+
+  <p><strong>What the wins say.</strong> When memory is loaded, sessions are denser, more productive, and orient to real work faster. The single largest effect — 4× more productive output per session — is consistent with the qualitative report from the primary user: <em>"You remembering things helps me. I am much less frustrated with the process."</em></p>
+
+  <p><strong>What the null says.</strong> The headline outcome — fewer repeated corrections — has not yet been demonstrated. Three honest theories: selection bias (memory loads on harder work); coverage gap (memory doesn't yet hold the right lessons); recall gap (memory is there but not applied under pressure). We're publishing the result rather than burying it. The system measures itself; we report what the measurement says.</p>
+
+  <div class="pull">
+    <strong>The honest framing:</strong> 3× more useful output per session. That's not a marketing number — it's what the instrumented data shows. The repeat-correction outcome remains an open question.
+  </div>
+
+  <h2><span class="num">05</span>Why this matters for your organisation</h2>
+
+  <p>If you employ knowledge workers and they use AI tools daily, this question is on your desk whether you've named it or not:</p>
+
+  <p><strong>Every correction your team types into an AI tool is a piece of organisational knowledge that vanishes the moment they close the tab.</strong></p>
+
+  <p>Across thousands of sessions per week per company, the cumulative leak is enormous. Brand voice, regulatory context, customer history, internal vocabulary, lessons learned — all retyped, every time, by the people whose time is most expensive.</p>
+
+  <p>MindMemory is one answer. The pattern is general:</p>
+
+  <ul>
+    <li><strong>Capture corrections automatically.</strong> Don't ask people to write FAQs nobody reads.</li>
+    <li><strong>Promote what gets confirmed.</strong> A lesson seen three times becomes a rule. A rule contradicted gets demoted. The system curates itself.</li>
+    <li><strong>Measure whether memory helps.</strong> If you can't measure it, you can't improve it. This applies to every AI tool your organisation deploys.</li>
+  </ul>
+
+  <p>The CoMindLab thesis: <strong>the 5% of organisations that succeed with AI don't have better technology. They have better collaboration design.</strong> Memory is one of the highest-leverage design choices available right now, and it's being left on the table by tools that focus on capability instead of continuity.</p>
+
+  <h2><span class="num">06</span>What we're offering</h2>
+
+  <p>MindMemory itself is open source (MIT) and free for any team to install. The repository is at <a href="https://github.com/CoMindLab-ai/mind-memory">github.com/CoMindLab-ai/mind-memory</a>.</p>
+
+  <p>For organisations that want the pattern adapted to their specific work — brand voice, regulatory context, decision frameworks, role-specific memory layers — CoMindLab offers three engagement models:</p>
+
+  <div class="grid-2">
+    <div class="box">
+      <div class="box-head">Co-Development · 1–3 weeks</div>
+      <div class="box-body">One team, one problem. We embed, build a memory layer for your highest-friction AI workflow, and leave it running.</div>
+    </div>
+    <div class="box">
+      <div class="box-head">Hyper-Customised · 3–8 weeks</div>
+      <div class="box-body">Memory layers across multiple roles. Identity templates per function. Measurement harness adapted to your KPIs.</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="box">
+      <div class="box-head">AI-Native Process · 6–12 weeks</div>
+      <div class="box-body">Memory + identity + heuristics designed into a full operating model. For teams treating AI as colleague-grade infrastructure, not a side tool.</div>
+    </div>
+    <div class="box">
+      <div class="box-head">Workshop · 1 day</div>
+      <div class="box-body">Hands-on session for your leadership team: design a memory layer for one strategic AI use case in your business, leave with a working prototype.</div>
+    </div>
+  </div>
+
+  <h2><span class="num">07</span>How to engage</h2>
+
+  <p>Three concrete next steps, in order of commitment:</p>
+
+  <ul>
+    <li><strong>Read the research.</strong> The full repository, including the architecture, the findings, and the open questions, is public. Two hours of reading will tell you whether this matches a real problem in your organisation.</li>
+    <li><strong>Try it.</strong> Install the starter kit on one Claude Code project. Use it for two weeks. The measurement harness will tell you whether memory is helping <em>your</em> work.</li>
+    <li><strong>Talk to us.</strong> If the pattern resonates and the friction it addresses sits squarely on your team's calendar, write to <a href="mailto:home@comindlab.ai">home@comindlab.ai</a>. We respond personally.</li>
+  </ul>
+
+  <div class="pull">
+    <strong>The bet:</strong> in 24 months, every serious knowledge organisation will have a memory layer between its people and its AI tools. The only question is whether you build yours deliberately, or accept whatever the platforms eventually impose.
+  </div>
+
+  <div class="footer-bar">
+    <span>CoMindLab Labs · MindMemory · Research preview · MIT</span>
+    <span>home@comindlab.ai · comindlab.ai</span>
+  </div>
+
+</div>
+</body>
+</html>

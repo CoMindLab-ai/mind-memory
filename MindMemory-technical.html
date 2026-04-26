@@ -26,6 +26,19 @@
     --mono: 'JetBrains Mono', ui-monospace, monospace;
   }
   @page { size: A4; margin: 18mm 16mm; }
+  @media print {
+    h2 { page-break-after: avoid; break-after: avoid; page-break-before: auto; }
+    h3 { page-break-after: avoid; break-after: avoid; }
+    p { orphans: 3; widows: 3; }
+    .pull, .stat-row, .stat, table, pre {
+      page-break-inside: avoid; break-inside: avoid;
+    }
+    .figure { page-break-inside: avoid; break-inside: avoid; }
+    .figure img { max-height: 200mm; width: auto; max-width: 100%; display: block; margin: 0 auto; }
+    .cover { page-break-after: avoid; break-after: avoid; padding-bottom: 12px; margin-bottom: 16px; }
+    .footer-bar { page-break-before: avoid; break-before: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {

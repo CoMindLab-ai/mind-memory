@@ -1,9 +1,9 @@
 ---
-name: mind-setup
-description: Interactive wizard that sets up a mind — identity, memory files, and working memory. Ask the user 6-8 questions via AskUserQuestion, then write personalised files to identity/ and memory/. Use when the user runs /mind-setup, says "set up a mind", "initialise memory", or starts with a fresh Minds starter kit.
+name: cognitive-memory-setup
+description: Interactive wizard that sets up a CognitiveMemory mind — identity, memory files, and working memory. Ask the user 6-8 questions via AskUserQuestion, then write personalised files to identity/ and memory/. Use when the user runs /cognitive-memory-setup, says "set up a mind", "initialise memory", or starts with a fresh CognitiveMemory starter kit.
 ---
 
-# Mind Setup Wizard
+# CognitiveMemory Setup Wizard
 
 You are walking a new user through setting up their first mind. Keep it
 conversational but brisk — under 5 minutes total.

@@ -21,15 +21,15 @@ personality, role, and hard rules.
 - Commit message style
 - Anything else new collaborators need to know
 
-## How this project uses Minds
+## How this project uses CognitiveMemory
 
-This project uses the [Minds starter kit](https://github.com/CoMindLab-ai/minds)
+This project uses the [CognitiveMemory starter kit](https://github.com/CoMindLab-ai/cognitive-memory)
 for memory and context. To update memory:
 
-- Run `/mind-setup` to re-seed identity + memory from a conversation
+- Run `/cognitive-memory-setup` to re-seed identity + memory from a conversation
 - Run `python .claude/hooks/metrics-brain.py` to see a weekly report on
   whether memory is measurably helping
 
 ---
 
-*Generated from Minds starter kit v0.1 — CoMindLab Labs*
+*Generated from CognitiveMemory starter kit v0.1 — CoMindLab Labs*

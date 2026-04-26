@@ -4,7 +4,7 @@
 
 CognitiveMemory walks your rules files and working-memory decisions, and writes a single `INDEX.md` you can scan in five seconds. It runs weekly via a SessionStart hook — zero manual upkeep.
 
-This is a self-contained drop-in folder. Sibling to `starter-kit/` in the [Minds research repo](../README.md). Copy it into your project, run `/memory-index`, done.
+This is a self-contained drop-in folder. Sibling to `starter-kit/` in the [CognitiveMemory research repo](../README.md). Copy it into your project, run `/memory-index`, done.
 
 ## What it does
 
@@ -75,4 +75,4 @@ MIT — see [LICENSE](LICENSE).
 
 ---
 
-*Part of the [Minds](../README.md) research preview, CoMindLab Labs 2026.*
+*Part of the [CognitiveMemory](../README.md) research preview, CoMindLab Labs 2026.*

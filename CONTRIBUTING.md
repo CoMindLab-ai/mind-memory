@@ -18,7 +18,7 @@ See [04-open-questions.md](04-open-questions.md) for the full list. The big ones
 - Is the **3-confirmation promotion rule** right?
 - Is **H5** (repeat-correction rate) the right primary outcome?
 - Can we separate memory effect from **selection effect** without running a suppression A/B?
-- Is **session-end** the right time to consolidate, or is mid-session better?
+- Are the **inner-loop intervals** right (collector ~10, curator ~25 tool calls)? Should they self-adjust to signal density?
 
 Strong opinions welcome. "Yes this is good" is less useful than "here's why you're wrong about X".
 

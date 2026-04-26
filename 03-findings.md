@@ -117,7 +117,7 @@ This is why we're publishing the starter kit. We want more users generating data
 
 1. **Memory loading correlates with denser, more productive sessions.** Confounded with complexity, but the effect size is large (4× H4).
 2. **Memory loading correlates with faster orientation.** H2 improves by ~10%. Small but consistent.
-3. **Measurement is cheap.** The hooks add <1 second to session end. Every user can run the same analysis on their own data.
+3. **Measurement is cheap.** The session-metrics hook adds <1 second to session end. The mid-session collector/curator hooks add ~1-2 seconds per fire (every ~10-25 tool calls). Every user can run the same analysis on their own data.
 
 ## What we're not confident about
 

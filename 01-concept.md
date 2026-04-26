@@ -46,26 +46,43 @@ A mind is **one markdown-based construct** wrapping all three. You can make a "d
 
 Andrej Karpathy's [LLM Wiki framing](https://x.com/karpathy/status/2039805659525644595) ([also in this gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)) is the kernel here. The idea: an agent that writes down what worked and what didn't, in structured natural language, then reads those notes back at the start of the next session. Not fine-tuning. Not vector search on every token. Just a curated, ever-improving wiki that the agent itself maintains.
 
-CognitiveMemory implements that loop in the smallest possible form:
+CognitiveMemory implements that loop with **three concentric maintenance cycles**, not just session bookends. Self-maintenance is continuous — the system curates itself while you work, not only when you log off.
 
 ```
-SESSION START                       SESSION END
-──────────────                      ───────────
-Load identity                       Detect signals: corrections,
-Load MEMORY.md      ──► WORK ──►    confirmations, follow-through
-Load working-memory                 Update working-memory
-                                    Promote confirmed patterns
-                                       to long-term memory
-                                    Archive stale entries
+┌─────────────────────────────────────────────────────────────────────┐
+│ INNER LOOP — every N tool calls (mid-session, PostToolUse hook)     │
+│   memory-collector  → scans live transcript, captures fresh         │
+│                       corrections / confirmations / follow-through  │
+│   memory-curator    → promotes hunch → heuristic after 3 fires;     │
+│                       demotes contradicted rules; archives stale    │
+└─────────────────────────────────────────────────────────────────────┘
+                              ▲
+                              │ fires repeatedly
+                              │ during the session
+┌─────────────────────────────────────────────────────────────────────┐
+│ MIDDLE LOOP — per session                                            │
+│   SessionStart  → load identity + MEMORY.md + working-memory         │
+│                   + health check (warns if curator hasn't run >7d)   │
+│   SessionEnd    → session-metrics writes one row to CSV              │
+└─────────────────────────────────────────────────────────────────────┘
+                              ▲
+                              │ wraps each session
+┌─────────────────────────────────────────────────────────────────────┐
+│ OUTER LOOP — weekly, time-gated                                      │
+│   metrics-brain     → reads CSV, computes H1–H5, writes report       │
+│   memory-index      → regenerates INDEX.md (optional feature)        │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
-Three signals drive the loop:
+Three signals drive the inner loop:
 
 - **Corrections** ("no", "wrong", "don't do that again") → candidate new heuristics
 - **Confirmations** ("yes exactly", "keep doing that") → reinforcement of existing approach
 - **Follow-through** (user accepts output without pushback) → silent confirmation
 
-A pattern that fires 3+ times gets promoted from "hunch" to "rule". A rule that's contradicted gets demoted or rewritten. The wiki maintains itself.
+A pattern that fires 3+ times gets promoted from "hunch" to "rule". A rule that's contradicted gets demoted or rewritten. **The wiki maintains itself, mid-session, without waiting for end-of-session.**
+
+Why mid-session matters: by the time a session ends, the model that would do the consolidation has already drifted from the moment of insight. Catching corrections within minutes of them happening produces tighter, more specific rules than catching them hours later. Session-end consolidation is the safety net, not the primary mechanism.
 
 ## Why markdown, not a database
 
@@ -88,7 +105,7 @@ If the kernel works — if people adopt it, extend it, disagree with us — the 
 ## The three principles we're testing publicly
 
 1. **Structured memory beats prompt engineering.** Put effort into the files, not the prompts.
-2. **Learning happens at the end of sessions, not during.** Consolidate when the context is fresh, load the lessons at the start of the next.
+2. **Continuous self-maintenance beats end-of-session batch.** Catch corrections mid-session while they're fresh, not hours later when context has drifted. Session-end is the safety net, not the primary loop.
 3. **Measurement keeps you honest.** Ship metrics with the memory system. If you can't measure whether memory is helping, you're guessing.
 
 The next two documents ([02-memory-architecture.md](02-memory-architecture.md) and [03-findings.md](03-findings.md)) unpack how we built this and what the data says after 3 months of daily use.

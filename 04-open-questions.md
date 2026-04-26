@@ -73,11 +73,13 @@ These are proxies. A polite user who types "hmm, not quite" won't register as ne
 
 ## On the learning loop
 
-### 7. Is session-end the right time to consolidate?
+### 7. Are the inner-loop intervals (collector ~10, curator ~25) right?
 
-The session-end hook is convenient but has a flaw: by the time the session ends, the model that's doing the consolidation has already drifted. Mid-session consolidation (every 25 messages, as the larger CognitiveMemory system does) catches insights while they're fresh.
+The starter kit runs `memory-collector.py` every ~10 tool calls and `memory-curator.py` every ~25 — both as PostToolUse hooks, mid-session. The numbers come from one user's intuition, not measurement.
 
-**Open question**: for the simple starter-kit case, is session-end good enough? Or should even the minimal version run mid-session consolidation?
+Trade-off: shorter intervals catch insights closer to the moment they happened (less model drift) but pay the hook cost more often. Longer intervals batch more and are cheaper.
+
+**Open question**: should the intervals be tuned per-project? Per session length? Should they be self-adjusting based on signal density (more frequent when corrections are firing, slower when the user is happy)?
 
 ### 8. Who should do the consolidation — the mind or a separate agent?
 

@@ -1,6 +1,6 @@
 ---
 name: cognitive-memory-setup
-description: Interactive wizard that sets up a CognitiveMemory mind — identity, memory files, and working memory. Has two paths — quick (6 questions, ~5 min) or deep-dive (extra conversation after question 3, ~15-20 min). Always runs a safety check first to never overwrite existing files without consent. Use when the user runs /cognitive-memory-setup, says "set up a mind", "initialise memory", or starts with a fresh CognitiveMemory starter kit.
+description: Interactive wizard that sets up a CognitiveMemory mind — identity, memory files, working memory, and user profile (accommodations). Has two paths — quick (7 questions, ~5 min) or deep-dive (extra conversation after question 3, ~15-20 min). Always runs a safety check first to never overwrite existing files without consent. Use when the user runs /cognitive-memory-setup, says "set up a mind", "initialise memory", or starts with a fresh CognitiveMemory starter kit.
 ---
 
 # CognitiveMemory Setup Wizard
@@ -16,6 +16,7 @@ Before asking anything, scan for existing files in the user's project:
 - `.claude/identity/anchor.md`
 - `memory/MEMORY.md`
 - `memory/working-memory.md`
+- `memory/user_profile.md`
 - any `memory/feedback_*.md`
 
 **If ANY of these exist**, surface them upfront via `AskUserQuestion`:
@@ -38,12 +39,12 @@ If NO existing files were found, proceed straight to question 1.
 
 ## Your job
 
-Ask 6 questions via `AskUserQuestion`, one at a time. After each answer,
+Ask 7 questions via `AskUserQuestion`, one at a time. After each answer,
 acknowledge briefly and move on. Don't lecture. After question 3 you
 offer an optional deep-dive (see "Optional deep-dive" below). When you
 have all answers (and any deep-dive material), write the files.
 
-## The six questions
+## The seven questions
 
 1. **Mind handle** — "What should we call this mind? Short, lowercase, no
    spaces (e.g. `alex-dev`, `research-assistant`, `writer`). This will be
@@ -78,15 +79,32 @@ have all answers (and any deep-dive material), write the files.
    responses', 'no emojis ever', 'imperial units', 'TypeScript over
    JavaScript'.)"
 
+7. **About you** — "A few things about YOU help the mind tailor everything
+   it shows you. Pick any that apply (multi-select), or skip:
+   - Dyslexic / prefer short sentences and clear visual structure
+   - Visual learner — diagrams beat walls of text
+   - ADHD / prefer one thing at a time, no walls of options
+   - Non-native English speaker — avoid idiom and slang
+   - Colour-blind (specify type if comfortable)
+   - I'm experienced — skip the explanations, just show me the answer
+   - I'm new to this domain — explain the why, not just the what
+   - Other — type your own"
+
+   These become a separate `memory/user_profile.md` file (NOT a hard rule
+   — accommodations, not constraints). They influence formatting and
+   pacing across every session, regardless of which specific mind is
+   active. Multi-select via `AskUserQuestion`. Skipping is fine — many
+   users don't want to share this.
+
 ## Optional deep-dive (offered after question 3)
 
 After the user picks an archetype, ask:
 
-> "I have enough to set up a basic mind in another 3 questions (~5 min
+> "I have enough to set up a basic mind in another 4 questions (~5 min
 > total). Or we can spend 10-15 more minutes shaping a richer personality
 > by talking it through. Which do you prefer?"
 >
-> 1. **Quick — finish the basic 6 questions** (default, ~5 min)
+> 1. **Quick — finish the basic 7 questions** (default, ~5 min)
 > 2. **Deep-dive — let's talk it through** (~15-20 min, richer result)
 
 If the user picks **Quick**, continue to question 4 normally.
@@ -129,15 +147,16 @@ archetype + the deep-dive answers. Show it to the user with:
 
 Iterate until the user says some variant of "yes, save it." Don't be
 sycophantic about edits — just apply them and re-show. After the user
-approves, **continue with questions 4-6 of the basic flow**. The
+approves, **continue with questions 4-7 of the basic flow**. The
 synthesised personality replaces the bare archetype paragraph in the
 identity file (see "1. .claude/identity/anchor.md" below — the
 `{PERSONALITY_PARAGRAPH}` slot).
 
 ## After the questions
 
-Write four files, using the user's answers. Use the current working
-directory's `.claude/` and `memory/` folders (create them if missing).
+Write up to five files (depends on answers — `user_profile.md` only if
+question 7 had selections). Use the current working directory's `.claude/`
+and `memory/` folders (create them if missing).
 
 **If the user picked "Backup then overwrite" in Step 0**, rename each
 existing target file to `<filename>.bak-{YYYY-MM-DD-HHMM}` BEFORE
@@ -211,7 +230,37 @@ type: feedback
 **How to apply:** {concrete rule, e.g. "before claiming done, run the test suite"}
 ```
 
-### 4. `memory/working-memory.md`
+### 4. `memory/user_profile.md` (only if question 7 had any selections)
+
+```markdown
+---
+name: User profile — accommodations
+description: How to adapt formatting and pacing for this user. Always loaded.
+type: user
+---
+
+These are accommodations, not strict rules. Apply them across every interaction unless the user overrides in the moment.
+
+{SELECTED_PROFILE_ITEMS}
+
+Each item should become a one-line guidance, e.g.:
+
+- **Dyslexic** → Short sentences. Visual hierarchy (headings, lists). Avoid wall-of-text. Lead with structure.
+- **Visual learner** → Prefer diagrams (Mermaid, ASCII), tables over prose, examples before abstractions.
+- **ADHD / one-thing-at-a-time** → Numbered options when asking. One question, not three. No menu walls.
+- **Non-native English** → Plain language, no idioms ("ballpark", "back of envelope", "rabbit hole").
+- **Colour-blind** → Don't rely on colour alone in diagrams; pair with shape or label.
+- **Experienced** → Skip the why. Direct answer first; reasoning only if asked.
+- **New to domain** → Explain the why before the how. Glossary inline for new terms.
+- **Other** → User's own free-text accommodation, applied as written.
+
+The mind reads this file at session start alongside identity and MEMORY.md.
+```
+
+Make sure to also link this file from `memory/MEMORY.md` under a
+new `## About the User` section so it gets surfaced via the index.
+
+### 5. `memory/working-memory.md`
 
 ```markdown
 # Working Memory — {YYYY-MM-DD}

@@ -44,6 +44,10 @@ Comparing sessions with ≥30 tool calls, since instrumentation went live 2026-0
 |---|---|---|---|---|---|---|---|
 | Memory **LOADED** | 71 | 18.5% | 14.6 | 2.0% | 26.0 | 19.7% | 76.1% |
 | Memory **NOT loaded** | 21 | 8.5% | 16.3 | 0.7% | 6.0 | 14.3% | 38.1% |
+| Memory **LOADED**, excl. W15 merge window | 41 | 18.9% | 14.4 | 2.1% | 26.7 | 14.8% | 71.0% |
+| Memory **NOT loaded**, excl. W15 merge window | 17 | 8.7% | 16.1 | 0.6% | 6.2 | 11.4% | 36.5% |
+
+The bottom two rows are a sensitivity check — they exclude the 2026-W15 sessions where a parallel-implementation merge inflated repeat-corrections regardless of memory state (see "Weekly history" below). Removing W15 nudges H5 closer between the two groups (14.8% vs 11.4%) but does not flip the direction. H1, H2, H4 are essentially unchanged — those signals are robust to the merge window. **We are publishing both rows so reviewers can see what dropping the contaminated week would buy.**
 
 What this shows:
 
@@ -75,6 +79,8 @@ The project's author (and sole long-term daily user so far) reports, unprompted,
 > *"I am much less frustrated with all the process. You remembering things helps me."*
 
 That's explicitly n=1 self-report, subject to every confirmation-bias caveat you'd expect. But it's also the kind of signal that's hard to fake — it came up in a technical debugging session, not while marketing the project. Worth documenting even though it can't be weighted as evidence.
+
+A second anecdotal data point from the same user: they are mildly dyslexic and a strong visual learner. Memory entries that reflect this — "prefer diagrams over walls of text", "lead with examples not abstractions", "short sentences, no jargon" — get used silently across sessions. They never have to re-explain that they want a Mermaid diagram instead of a paragraph. That kind of preference is **exactly the class of memory most worth having** because (a) it's not a one-off correction, it applies to every interaction, and (b) it's invisible to language-pattern detection — there's no "wrong" or "again" because the mind just does the right thing the first time. We suspect the largest real benefit of memory is in this category and we currently can't measure it.
 
 The observation doesn't show up in H5, probably because the type of frustration memory *does* reduce (having to re-explain preferences, re-teach the same lesson) gets resolved before it escalates to the language patterns our hook detects ("wrong", "again", "told you"). By the time those words fire, something has already failed.
 
@@ -112,6 +118,17 @@ Two things worth flagging here:
 4. **Direct frustration measurement.** Our negative-signal detector is a language proxy. A real survey — "how frustrated were you with this session?" — would be better.
 
 This is why we're publishing the starter kit. We want more users generating data we can't generate alone.
+
+### How we'd actually collect at scale (planned, not built)
+
+Asking users to upload a CSV via GitHub issue gets near-zero data. The plan is **opt-in anonymous aggregation telemetry**:
+
+- New env var `COGNITIVEMEM_TELEMETRY=1` (off by default)
+- New SessionEnd hook computes the H1-H5 numbers locally
+- POSTs only the metrics + a project-folder hash + week bucket. **Never sends transcripts, prompts, code, paths, env, or filenames.**
+- Backend (Cloudflare Workers + D1, ~zero cost at small scale) stores rows; we publish weekly aggregate trends back to the repo
+
+Privacy commitments will be documented exactly — sample JSON payload in the README, opt-in only, never auto-on. **Not built yet.** Listed here so reviewers can comment on the design before the endpoint goes up.
 
 ## What we're confident about
 

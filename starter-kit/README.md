@@ -111,7 +111,7 @@ If you already have `hooks.SessionEnd`, append the session-metrics entry to the 
 
 **Step 0 — Safety check** (only if you have existing CognitiveMemory files). The wizard scans `.claude/identity/` and `memory/` and asks how to handle anything it finds: **Overwrite**, **Backup then overwrite** (renames to `<name>.bak-{timestamp}`, recommended), **Skip existing**, or **Cancel**. Whatever you pick is honoured for every file.
 
-**Quick path (default, ~5 min)** — six questions via `AskUserQuestion`:
+**Quick path (default, ~5 min)** — seven questions via `AskUserQuestion`:
 
 1. **Mind handle** — short lowercase name (`alex-dev`, `research-assistant`)
 2. **Role** — one sentence about what this mind does
@@ -119,6 +119,7 @@ If you already have `hooks.SessionEnd`, append the session-metrics entry to the 
 4. **Hard rules** — 2-3 things this mind must never do
 5. **Past mistakes to remember** — seeds the first memory entries
 6. **Working style preferences** — brevity, tools, conventions
+7. **About you** — multi-select accommodations (dyslexic, visual learner, ADHD, non-native English, colour-blind, experienced, new to domain, other). Skippable. Goes into a separate `user_profile.md` that influences formatting and pacing across every session — not a hard rule.
 
 **Deep-dive path (opt-in, +10-15 min)** — after question 3 the wizard offers a deeper conversation. If you opt in, it switches from multiple-choice to free-form chat and asks open questions about how you want the mind to disagree, deliver bad news, what makes you proud of its work, words you never want to hear, etc. Then it drafts a 2-3 paragraph personality, shows it to you, and iterates until you say "save it." After approval it returns to questions 4-6.
 
@@ -128,6 +129,7 @@ When done, the wizard writes:
 - `memory/MEMORY.md` — index with your starter entries
 - `memory/feedback_*.md` — one file per past-mistake entry
 - `memory/working-memory.md` — current focus
+- `memory/user_profile.md` — your accommodations, only if you answered question 7
 
 Re-run any time to update — the safety check protects existing work.
 
